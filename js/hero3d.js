@@ -4,7 +4,7 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 
-const MODEL_URL = "/__l5e/assets-v1/5d24afbd-be7c-40c2-b209-ced3716a92c4/crystal.glb";
+const MODEL_URL = "models/crystal.glb";
 
 const mount = document.querySelector("[data-hero3d]");
 if (mount && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
