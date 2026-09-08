@@ -56,12 +56,68 @@ if (mount && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     mount.classList.add("is-ready");
   });
 
+  // Interaction : glisser pour faire tourner le cristal, molette pour zoomer.
   const pointer = { x: 0, y: 0 };
   const target = { x: 0, y: 0 };
+  const rot = { x: 0, y: 0 };
+  const vel = { x: 0, y: 0 };
+  let dragging = false;
+  let dragged = false;
+  let last = { x: 0, y: 0 };
+  let idle = 0;
+  let zoom = 3.4;
+
   window.addEventListener("pointermove", (e) => {
     target.x = (e.clientX / window.innerWidth - 0.5) * 2;
     target.y = (e.clientY / window.innerHeight - 0.5) * 2;
   }, { passive: true });
+
+  mount.addEventListener("pointerdown", (e) => {
+    dragging = true;
+    dragged = false;
+    idle = 0;
+    last = { x: e.clientX, y: e.clientY };
+    mount.setPointerCapture(e.pointerId);
+    mount.style.cursor = "grabbing";
+  });
+
+  mount.addEventListener("pointermove", (e) => {
+    if (!dragging) return;
+    const dx = e.clientX - last.x;
+    const dy = e.clientY - last.y;
+    last = { x: e.clientX, y: e.clientY };
+    if (Math.abs(dx) + Math.abs(dy) > 2) dragged = true;
+    vel.y = dx * 0.006;
+    vel.x = dy * 0.006;
+    rot.y += vel.y;
+    rot.x = Math.max(-1.2, Math.min(1.2, rot.x + vel.x));
+  });
+
+  function endDrag(e) {
+    if (!dragging) return;
+    dragging = false;
+    mount.style.cursor = "grab";
+    if (e && e.pointerId !== undefined && mount.hasPointerCapture(e.pointerId)) {
+      mount.releasePointerCapture(e.pointerId);
+    }
+  }
+  mount.addEventListener("pointerup", endDrag);
+  mount.addEventListener("pointercancel", endDrag);
+  mount.addEventListener("pointerleave", endDrag);
+
+  mount.addEventListener("wheel", (e) => {
+    e.preventDefault();
+    zoom = Math.max(2.2, Math.min(5, zoom + e.deltaY * 0.0016));
+  }, { passive: false });
+
+  mount.addEventListener("dblclick", () => {
+    rot.x = 0;
+    rot.y = 0;
+    vel.x = 0;
+    vel.y = 0;
+    zoom = 3.4;
+    idle = 0;
+  });
 
   function resize() {
     const w = mount.clientWidth;
@@ -81,11 +137,29 @@ if (mount && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
   renderer.setAnimationLoop(() => {
     if (!visible) return;
     const t = clock.getElapsedTime();
+    const dt = Math.min(clock.getDelta(), 0.05);
+
+    if (!dragging) {
+      // inertie puis reprise douce de la rotation automatique
+      rot.y += vel.y;
+      rot.x = Math.max(-1.2, Math.min(1.2, rot.x + vel.x));
+      const damp = Math.exp(-3.2 * dt);
+      vel.x *= damp;
+      vel.y *= damp;
+      idle += dt;
+      if (idle > 2.5 && Math.abs(vel.y) < 0.001) rot.y += 0.25 * dt;
+    } else {
+      idle = 0;
+    }
+
     pointer.x += (target.x - pointer.x) * 0.05;
     pointer.y += (target.y - pointer.y) * 0.05;
-    group.rotation.y = t * 0.25 + pointer.x * 0.4;
-    group.rotation.x = Math.sin(t * 0.4) * 0.08 + pointer.y * 0.25;
+
+    group.rotation.y = rot.y + pointer.x * 0.2;
+    group.rotation.x = rot.x + Math.sin(t * 0.4) * 0.06 + pointer.y * 0.12;
     group.position.y = Math.sin(t * 0.8) * 0.06;
+
+    camera.position.z += (zoom - camera.position.z) * 0.08;
     renderer.render(scene, camera);
   });
 }
