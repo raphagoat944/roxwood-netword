@@ -136,8 +136,8 @@ if (mount && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
   const clock = new THREE.Clock();
   renderer.setAnimationLoop(() => {
     if (!visible) return;
-    const t = clock.getElapsedTime();
     const dt = Math.min(clock.getDelta(), 0.05);
+    const t = clock.elapsedTime;
 
     if (!dragging) {
       // inertie puis reprise douce de la rotation automatique
