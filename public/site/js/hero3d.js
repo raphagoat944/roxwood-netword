@@ -14,9 +14,14 @@ if (mount && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
   renderer.toneMappingExposure = 1.15;
   mount.appendChild(renderer.domElement);
 
+  // Limites de zoom personnalisables par montage (ex. page d'accueil plus large)
+  const baseZoom = parseFloat(mount.dataset.zoomBase || "3.4");
+  const minZoom = parseFloat(mount.dataset.zoomMin || "2.2");
+  const maxZoom = parseFloat(mount.dataset.zoomMax || "5");
+
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
-  camera.position.set(0, 0, 3.4);
+  camera.position.set(0, 0, baseZoom);
 
   const pmrem = new THREE.PMREMGenerator(renderer);
   scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
@@ -65,7 +70,7 @@ if (mount && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
   let dragged = false;
   let last = { x: 0, y: 0 };
   let idle = 0;
-  let zoom = 3.4;
+  let zoom = baseZoom;
 
   window.addEventListener("pointermove", (e) => {
     target.x = (e.clientX / window.innerWidth - 0.5) * 2;
@@ -107,7 +112,7 @@ if (mount && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
 
   mount.addEventListener("wheel", (e) => {
     e.preventDefault();
-    zoom = Math.max(2.2, Math.min(5, zoom + e.deltaY * 0.0016));
+    zoom = Math.max(minZoom, Math.min(maxZoom, zoom + e.deltaY * 0.0016));
   }, { passive: false });
 
   mount.addEventListener("dblclick", () => {
@@ -115,7 +120,7 @@ if (mount && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     rot.y = 0;
     vel.x = 0;
     vel.y = 0;
-    zoom = 3.4;
+    zoom = baseZoom;
     idle = 0;
   });
 
