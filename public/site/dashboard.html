@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Tableau de bord — Roxwood Network</title>
-  <meta name="description" content="Tableau de bord interne Roxwood Network : projets en cours, statut des dépôts GitHub et création de nouveaux projets.">
+  <meta name="description" content="Tableau de bord interne Roxwood Network : candidatures, commandes et factures, absences et journaux d'activité relayés par le bot.">
   <link rel="icon" href="img/logo.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,7 +16,7 @@
 
   <section class="page-hero" style="padding-bottom:2.5rem">
     <div class="container">
-      <span class="status"><i></i>Connecté via Roxwood GitHub Bot</span>
+      <span class="status"><i></i>Connecté — flux du bot actif</span>
       <h1 style="margin-top:.8rem">Tableau de bord</h1>
       <p class="section-lead">
         Bonjour <b data-user-name>Membre</b> — <span data-user-role>Accès lecture</span>.
@@ -27,74 +27,112 @@
   <section class="section" style="padding-top:2.5rem">
     <div class="container dash-grid">
 
-      <!-- Colonne latérale -->
       <aside class="dash-side reveal reveal--left">
         <h4 style="font-size:.75rem;letter-spacing:.18em;text-transform:uppercase;color:var(--grey)">Navigation</h4>
         <nav>
-          <a href="#projets" class="is-active">Projets</a>
-          <a href="#depots">Dépôts GitHub</a>
-          <a href="https://github.com/poulpizar01/roxwood-network-entreprise" target="_blank" rel="noopener">Bot Roxwood</a>
-          <a href="portfolio.html">Portfolio public</a>
+          <a href="#candidatures" class="is-active">Candidatures</a>
+          <a href="#commandes">Commandes &amp; factures</a>
+          <a href="#absences">Absences</a>
+          <a href="#journaux">Journaux d'activité</a>
+          <a href="#flux">Flux entrants</a>
         </nav>
         <button class="btn btn--ghost btn--block" style="margin-top:1.4rem" type="button" data-logout>Déconnexion</button>
       </aside>
 
-      <!-- Contenu -->
       <div style="display:grid;gap:1.5rem">
 
         <div class="grid grid--4">
-          <div class="card reveal"><div class="kpi"><strong>6</strong><span>Projets actifs</span></div></div>
-          <div class="card reveal" data-delay="80"><div class="kpi"><strong>12</strong><span>Dépôts suivis</span></div></div>
-          <div class="card reveal" data-delay="160"><div class="kpi"><strong>3</strong><span>Déploiements 24 h</span></div></div>
-          <div class="card reveal" data-delay="240"><div class="kpi"><strong>2</strong><span>Demandes en attente</span></div></div>
+          <div class="card reveal"><div class="kpi"><strong>4</strong><span>Candidatures en cours</span></div></div>
+          <div class="card reveal" data-delay="80"><div class="kpi"><strong>7</strong><span>Commandes du jour</span></div></div>
+          <div class="card reveal" data-delay="160"><div class="kpi"><strong>2</strong><span>Absences à traiter</span></div></div>
+          <div class="card reveal" data-delay="240"><div class="kpi"><strong>128</strong><span>Journaux reçus (24 h)</span></div></div>
         </div>
 
         <div class="alert alert--ok"></div>
 
-        <!-- Liste des projets -->
-        <section id="projets" class="panel reveal">
+        <!-- Candidatures -->
+        <section id="candidatures" class="panel reveal">
           <div style="display:flex;flex-wrap:wrap;gap:1rem;justify-content:space-between;align-items:center">
-            <h2 style="font-size:1.25rem">Projets</h2>
-            <button class="btn btn--primary" type="button" data-create-project>Créer un nouveau projet</button>
+            <h2 style="font-size:1.25rem">Candidatures</h2>
+            <button class="btn btn--primary" type="button" data-refresh>Actualiser le flux</button>
           </div>
-
-          <div class="table-wrap" style="margin-top:1.4rem" id="depots">
+          <p class="form-note" style="margin-top:.6rem">
+            Formulaire rempli dans le ticket, suivi piloté par le staff depuis Discord ; chaque changement de statut ou d'assignation arrive ici.
+          </p>
+          <div class="table-wrap" style="margin-top:1.2rem">
             <table>
-              <thead>
-                <tr><th>Projet</th><th>Type</th><th>Dépôt GitHub</th><th>Statut</th><th></th></tr>
-              </thead>
+              <thead><tr><th>Candidat</th><th>Statut</th><th>Recruteur</th><th>Pièces jointes</th></tr></thead>
               <tbody>
-                <tr>
-                  <td>Roxwood Entreprise</td>
-                  <td><span class="tag">Entreprise</span></td>
-                  <td>roxwood-network-entreprise</td>
-                  <td><span class="status"><i></i>Déployé</span></td>
-                  <td><a class="btn btn--ghost" href="https://github.com/poulpizar01/roxwood-network-entreprise" target="_blank" rel="noopener">Ouvrir le dépôt GitHub</a></td>
-                </tr>
-                <tr>
-                  <td>Marlowe Vineyard</td>
-                  <td><span class="tag">Agence</span></td>
-                  <td>Marlowe-Vineyard</td>
-                  <td><span class="status"><i></i>Déployé</span></td>
-                  <td><a class="btn btn--ghost" href="https://poulpizar01.github.io/Marlowe-Vineyard/index.html" target="_blank" rel="noopener">Ouvrir le site</a></td>
-                </tr>
-                <tr>
-                  <td>LaMaja13</td>
-                  <td><span class="tag tag--magenta">Illégal</span></td>
-                  <td>lamaja13-interface</td>
-                  <td><span class="status status--warn"><i></i>Build en cours</span></td>
-                  <td><a class="btn btn--ghost" href="https://lamaja13.duckdns.org/" target="_blank" rel="noopener">Ouvrir le site</a></td>
-                </tr>
-                <tr>
-                  <td>Portail interne — Services publics</td>
-                  <td><span class="tag">Agence</span></td>
-                  <td>rox-portail-services</td>
-                  <td><span class="status status--off"><i></i>Brouillon</span></td>
-                  <td><a class="btn btn--ghost" href="https://github.com/poulpizar01/roxwood-network-entreprise" target="_blank" rel="noopener">Ouvrir le dépôt GitHub</a></td>
-                </tr>
+                <tr><td>Ethan Vance</td><td><span class="status"><i></i>Accepté</span></td><td>Poulpizar</td><td>2 fichiers</td></tr>
+                <tr><td>Nora Kessler</td><td><span class="status status--warn"><i></i>Entretien</span></td><td>Marina L.</td><td>1 fichier</td></tr>
+                <tr><td>Diego Ruiz</td><td><span class="status status--warn"><i></i>En attente</span></td><td>Non assigné</td><td>—</td></tr>
+                <tr><td>Camille Roy</td><td><span class="status status--off"><i></i>Refusé</span></td><td>Poulpizar</td><td>3 fichiers</td></tr>
               </tbody>
             </table>
           </div>
+        </section>
+
+        <!-- Commandes -->
+        <section id="commandes" class="panel reveal">
+          <h2 style="font-size:1.25rem">Commandes &amp; factures</h2>
+          <p class="form-note" style="margin-top:.6rem">
+            Le client compose sa commande dans son ticket ; à la confirmation du paiement, la facture est générée et son numéro remonte ici.
+          </p>
+          <div class="table-wrap" style="margin-top:1.2rem">
+            <table>
+              <thead><tr><th>Facture</th><th>Client</th><th>Articles</th><th>Total</th><th>Paiement</th></tr></thead>
+              <tbody>
+                <tr><td>#0142</td><td>Dynasty 8</td><td>Pack vitrine + hébergement</td><td>18 500 $</td><td><span class="status"><i></i>Payée</span></td></tr>
+                <tr><td>#0143</td><td>Marlowe Vineyard</td><td>Refonte + galerie</td><td>12 000 $</td><td><span class="status"><i></i>Payée</span></td></tr>
+                <tr><td>#0144</td><td>Client privé</td><td>Interface confidentielle</td><td>24 000 $</td><td><span class="status status--warn"><i></i>En attente</span></td></tr>
+                <tr><td>—</td><td>Atelier Kovacs</td><td>Devis en composition</td><td>—</td><td><span class="status status--off"><i></i>Brouillon</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <div class="grid grid--2">
+          <!-- Absences -->
+          <section id="absences" class="panel reveal">
+            <h2 style="font-size:1.25rem">Absences</h2>
+            <ul class="feature-list" style="margin-top:1rem">
+              <li><i class="dot"></i><div><b>Marina L. — 12/09 au 15/09</b><span>Acceptée par la direction.</span></div></li>
+              <li><i class="dot"></i><div><b>Diego R. — 14/09 au 16/09</b><span>En attente d'un approbateur.</span></div></li>
+              <li><i class="dot"></i><div><b>Ethan V. — 20/09</b><span>En attente d'un approbateur.</span></div></li>
+            </ul>
+          </section>
+
+          <!-- Journaux -->
+          <section id="journaux" class="panel reveal" data-delay="120">
+            <h2 style="font-size:1.25rem">Journaux d'activité</h2>
+            <ul class="feature-list" style="margin-top:1rem">
+              <li><i class="dot"></i><div><b>Prises de service</b><span>18 aujourd'hui — rôle attribué automatiquement.</span></div></li>
+              <li><i class="dot"></i><div><b>Mouvements de coffre</b><span>34 entrées, stock à jour par emplacement.</span></div></li>
+              <li><i class="dot"></i><div><b>Ventes &amp; factures</b><span>Montants et taxes consolidés pour les statistiques.</span></div></li>
+            </ul>
+          </section>
+        </div>
+
+        <!-- Flux entrants -->
+        <section id="flux" class="panel reveal">
+          <h2 style="font-size:1.25rem">Flux entrants</h2>
+          <p class="form-note" style="margin-top:.6rem">
+            Abonnements reçus depuis le bot. Chaque envoi est signé et vérifié avant d'être enregistré ;
+            un envoi non signé ou mal signé est rejeté.
+          </p>
+          <div class="table-wrap" style="margin-top:1.2rem">
+            <table>
+              <thead><tr><th>Flux</th><th>Contenu</th><th>Dernière réception</th><th>État</th></tr></thead>
+              <tbody>
+                <tr><td>Candidatures</td><td>Statut, recruteur, réponses</td><td>il y a 4 min</td><td><span class="status"><i></i>Actif</span></td></tr>
+                <tr><td>Commandes</td><td>Articles, total, facture</td><td>il y a 11 min</td><td><span class="status"><i></i>Actif</span></td></tr>
+                <tr><td>Absences</td><td>Dates, motif, décision</td><td>il y a 1 h</td><td><span class="status"><i></i>Actif</span></td></tr>
+                <tr><td>Coffre</td><td>Mouvements et stock résultant</td><td>il y a 2 min</td><td><span class="status"><i></i>Actif</span></td></tr>
+                <tr><td>Personnalisé</td><td>Tableaux externes synchronisés</td><td>il y a 5 min</td><td><span class="status status--warn"><i></i>Reprise en cours</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <a class="btn btn--ghost" style="margin-top:1.3rem" href="https://github.com/poulpizar01/roxwood-network-entreprise" target="_blank" rel="noopener">Voir le dépôt du bot</a>
         </section>
 
       </div>
