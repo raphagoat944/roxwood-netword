@@ -26,15 +26,13 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  useEffect(() => {
-    window.location.replace("/site/index.html");
-  }, []);
-
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <a className="text-foreground underline" href="/site/index.html">
-        Ouvrir le site Roxwood Network
-      </a>
+    <div className="flex min-h-screen flex-col items-center justify-center gap-3 bg-background p-8 text-center">
+      <h1 className="text-2xl font-semibold text-foreground">Roxwood Network</h1>
+      <p className="max-w-md text-muted-foreground">
+        Les fichiers du site (index.html, css, js, img, models) sont à la racine
+        du projet, prêts pour GitHub Pages.
+      </p>
     </div>
   );
 }
