@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect } from "react";
 
 // Le site Roxwood Network est un site statique HTML/CSS/JS servi depuis /site.
 // La racine redirige simplement vers sa page d'accueil.
