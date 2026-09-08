@@ -472,3 +472,76 @@ tbody tr:hover { background: rgba(34, 211, 255, 0.05); }
   * { animation: none !important; transition-duration: 0.01ms !important; }
   .reveal { opacity: 1; transform: none; }
 }
+
+/* ---------- 12. Fenêtre navigateur & modale de preview ---------- */
+.browser {
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--navy-700);
+  box-shadow: 0 40px 90px -40px rgba(0, 0, 0, 0.9);
+}
+.browser__bar {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.6rem 0.9rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--line);
+}
+.browser__dots { display: flex; gap: 0.35rem; }
+.browser__dots i { width: 10px; height: 10px; border-radius: 50%; background: #33405f; }
+.browser__url {
+  font-size: 0.78rem; color: var(--grey);
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 999px; padding: 0.25rem 0.8rem;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.browser__open { font-size: 0.78rem; color: var(--cyan); white-space: nowrap; }
+
+/* Zone cliquable qui ouvre le vrai site */
+.shot { position: relative; display: block; overflow: hidden; background: var(--navy-800); cursor: pointer; }
+.shot img { width: 100%; display: block; transition: transform 0.8s var(--ease); }
+.shot:hover img { transform: scale(1.03); }
+.shot__hint {
+  position: absolute; inset: auto 0 0 0;
+  display: flex; justify-content: center; padding: 1.4rem;
+  background: linear-gradient(180deg, transparent, rgba(5, 7, 15, 0.9));
+  opacity: 0; transition: opacity 0.4s ease;
+}
+.shot:hover .shot__hint { opacity: 1; }
+.shot__hint span {
+  padding: 0.6rem 1.2rem; border-radius: 999px;
+  background: var(--grad-brand); color: #04060e; font-weight: 600; font-size: 0.85rem;
+  box-shadow: var(--glow-cyan);
+}
+
+/* Modale */
+.modal {
+  position: fixed; inset: 0; z-index: 100;
+  display: none; place-items: center;
+  padding: clamp(0.8rem, 3vw, 2.5rem);
+  background: rgba(3, 5, 12, 0.82);
+  backdrop-filter: blur(10px);
+}
+.modal.is-open { display: grid; animation: fadeUp 0.35s var(--ease); }
+.modal__box { width: min(1080px, 100%); max-height: 92vh; overflow: auto; }
+.modal__head {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center; gap: 1rem; margin-bottom: 1rem;
+}
+.modal__close {
+  width: 42px; height: 42px; border-radius: 50%;
+  border: 1px solid var(--line); background: rgba(255, 255, 255, 0.06);
+  color: var(--white); font-size: 1.2rem; cursor: pointer;
+}
+.modal__close:hover { border-color: var(--cyan); box-shadow: var(--glow-cyan); }
+.modal__thumbs { display: flex; gap: 0.6rem; margin-top: 0.9rem; flex-wrap: wrap; }
+.modal__thumbs img {
+  width: 108px; aspect-ratio: 16/10; object-fit: cover; object-position: top;
+  border-radius: 8px; border: 1px solid var(--line); cursor: pointer; opacity: 0.55;
+  transition: opacity 0.3s ease, border-color 0.3s ease;
+}
+.modal__thumbs img:hover, .modal__thumbs img.is-active { opacity: 1; border-color: var(--cyan); }
+body.no-scroll { overflow: hidden; }
