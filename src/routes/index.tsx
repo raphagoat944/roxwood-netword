@@ -6,13 +6,13 @@ import { useEffect } from "react";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Roxwood Network — Agence Digitale RP" },
+      { title: "Roxwood Network — Agence Digitale" },
       {
         name: "description",
         content:
           "Roxwood Network conçoit des sites et portails immersifs pour entreprises, agences et organisations.",
       },
-      { property: "og:title", content: "Roxwood Network — Agence Digitale RP" },
+      { property: "og:title", content: "Roxwood Network — Agence Digitale" },
       {
         property: "og:description",
         content:
@@ -27,12 +27,12 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   useEffect(() => {
-    window.location.replace("/site/index.html");
+    window.location.replace("/site/accueil.html");
   }, []);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background">
-      <a className="text-foreground underline" href="/site/index.html">
+      <a className="text-foreground underline" href="/site/accueil.html">
         Ouvrir le site Roxwood Network
       </a>
     </div>
