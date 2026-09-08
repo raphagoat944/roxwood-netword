@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Portfolio — Roxwood Network</title>
-  <meta name="description" content="Explorez les réalisations de Roxwood Network : vitrines d'entreprise, portails d'agence et interfaces confidentielles.">
+  <meta name="description" content="Explorez les réalisations de Roxwood Network : Dynasty 8, Marlowe Vineyard et La Maja 13, avec preview interactive.">
   <link rel="icon" href="img/logo.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,62 +18,16 @@
     <div class="container">
       <span class="eyebrow reveal">Réalisations</span>
       <h1 class="reveal" data-delay="60">Portfolio <span class="text-grad">Roxwood Network</span></h1>
-      <p class="section-lead reveal" data-delay="120">Explorez nos réalisations et nos capacités.</p>
+      <p class="section-lead reveal" data-delay="120">
+        Explorez nos réalisations : ouvrez la preview, parcourez les captures réelles du site,
+        puis cliquez sur l'aperçu pour accéder directement au site en ligne.
+      </p>
     </div>
   </section>
 
   <section class="section">
-    <div class="container grid grid--3">
-
-      <!-- Projet 1 -->
-      <article class="card project reveal">
-        <div class="project__media">
-          <span class="tag project__badge">Entreprise</span>
-          <img src="img/project-1.jpg" alt="Aperçu du site Roxwood Entreprise" loading="lazy" width="1200" height="800">
-        </div>
-        <div class="project__body">
-          <h3>Roxwood Entreprise</h3>
-          <p>Vitrine corporate complète : présentation de l'activité, pôles internes et point de contact unique.</p>
-          <div class="project__actions">
-            <a class="btn btn--primary" href="http://51.255.173.188/accueil.html" target="_blank" rel="noopener">Explorer le site</a>
-            <a class="btn btn--ghost" href="portfolio-preview.html?p=1">Voir la preview</a>
-          </div>
-        </div>
-      </article>
-
-      <!-- Projet 2 -->
-      <article class="card project reveal" data-delay="120">
-        <div class="project__media">
-          <span class="tag project__badge">Agence</span>
-          <img src="img/project-2.jpg" alt="Aperçu du site Marlowe Vineyard" loading="lazy" width="1200" height="800">
-        </div>
-        <div class="project__body">
-          <h3>Marlowe Vineyard</h3>
-          <p>Domaine viticole : univers élégant, présentation des cuvées et prise de contact pour les événements.</p>
-          <div class="project__actions">
-            <a class="btn btn--primary" href="https://poulpizar01.github.io/Marlowe-Vineyard/index.html" target="_blank" rel="noopener">Explorer le site</a>
-            <a class="btn btn--ghost" href="portfolio-preview.html?p=2">Voir la preview</a>
-          </div>
-        </div>
-      </article>
-
-      <!-- Projet 3 -->
-      <article class="card card--magenta project reveal" data-delay="240">
-        <div class="project__media">
-          <span class="tag tag--magenta project__badge">Illégal</span>
-          <img src="img/project-3.jpg" alt="Aperçu du site LaMaja13" loading="lazy" width="1200" height="800">
-        </div>
-        <div class="project__body">
-          <h3>LaMaja13</h3>
-          <p>Interface d'organisation discrète : accès filtré, ambiance nocturne et navigation volontairement épurée.</p>
-          <div class="project__actions">
-            <a class="btn btn--primary" href="https://lamaja13.duckdns.org/" target="_blank" rel="noopener">Explorer le site</a>
-            <a class="btn btn--ghost" href="portfolio-preview.html?p=3">Voir la preview</a>
-          </div>
-        </div>
-      </article>
-
-    </div>
+    <!-- Grille générée par js/portfolio.js -->
+    <div class="container grid grid--3" data-portfolio-grid></div>
   </section>
 
   <section class="section" style="padding-top:0">
@@ -86,6 +40,7 @@
   </section>
 
   <div data-footer></div>
+  <script src="js/portfolio.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

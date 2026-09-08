@@ -26,7 +26,6 @@
     if (!host) return;
     var active = currentPage();
     // Les sous-pages restent rattachées à leur rubrique parente.
-    if (active === "portfolio-preview.html") active = "portfolio.html";
     if (active === "dashboard.html") active = "membres.html";
 
     var links = PAGES.map(function (p) {
@@ -72,14 +71,14 @@
       "</div>" +
       "<div><h4>Services</h4>" +
       '<a href="services.html#vitrines">Sites vitrines</a>' +
-      '<a href="services.html#portails">Portails RP</a>' +
+      '<a href="services.html#portails">Portails internes</a>' +
       '<a href="services.html#bots">Intégration bots / API</a>' +
       '<a href="services.html#clandestin">Systèmes sécurisés</a>' +
       "</div>" +
       "<div><h4>Contact</h4>" +
       '<a href="mailto:contact@roxwood-network.rp">contact@roxwood-network.rp</a>' +
       "<a href=\"contact.html\">Discord : RoxwoodNetwork#0001</a>" +
-      '<a href="https://github.com/poulpizar01/roxwood-network-entreprise" target="_blank" rel="noopener">Bot GitHub Roxwood</a>' +
+      '<a href="https://github.com/poulpizar01/roxwood-network-entreprise" target="_blank" rel="noopener">Notre bot Discord</a>' +
       "</div>" +
       "</div>" +
       '<div class="footer-bottom"><span>&copy; ' + new Date().getFullYear() +
