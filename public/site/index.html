@@ -157,6 +157,50 @@
   addEventListener("resize", build);
   if (!matchMedia("(prefers-reduced-motion: reduce)").matches) frame();
   else { t = 1; ctx.clearRect(0,0,w,h); stars.forEach(st=>{ctx.beginPath();ctx.arc(st.x,st.y,st.r,0,6.28);ctx.fillStyle="rgba(230,240,255,.7)";ctx.fill();}); }
+
+  // Logo manipulable à la souris, comme une pièce
+  (function () {
+    const coin = document.getElementById("coin");
+    const logo = coin.querySelector(".splash__logo");
+    let rx = 0, ry = 0, vx = 0, vy = 0, dragging = false, lastX = 0, lastY = 0, idle = 0;
+
+    function render() {
+      if (!dragging) {
+        rx += vx; ry += vy;
+        vx *= 0.94; vy *= 0.94;
+        idle++;
+        if (idle > 150 && Math.abs(vy) < 0.05) { vy += (0.35 - vy) * 0.02; }
+        rx += (0 - rx) * 0.01;
+      }
+      logo.style.transform = "rotateX(" + rx.toFixed(2) + "deg) rotateY(" + ry.toFixed(2) + "deg)";
+      requestAnimationFrame(render);
+    }
+
+    coin.addEventListener("pointerdown", (e) => {
+      dragging = true; idle = 0; lastX = e.clientX; lastY = e.clientY;
+      coin.classList.add("is-dragging");
+      coin.setPointerCapture(e.pointerId);
+    });
+    coin.addEventListener("pointermove", (e) => {
+      if (!dragging) return;
+      const dx = e.clientX - lastX, dy = e.clientY - lastY;
+      lastX = e.clientX; lastY = e.clientY;
+      ry += dx * 0.6; rx -= dy * 0.6;
+      vx = -dy * 0.06; vy = dx * 0.06;
+    });
+    function end(e) {
+      if (!dragging) return;
+      dragging = false; idle = 0;
+      coin.classList.remove("is-dragging");
+      try { coin.releasePointerCapture(e.pointerId); } catch (_) {}
+    }
+    coin.addEventListener("pointerup", end);
+    coin.addEventListener("pointercancel", end);
+    coin.addEventListener("dblclick", () => { rx = 0; ry = 0; vx = 0; vy = 0; });
+
+    if (!matchMedia("(prefers-reduced-motion: reduce)").matches) render();
+  })();
+
 </script>
 </body>
 </html>
