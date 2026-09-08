@@ -13,7 +13,7 @@
     { href: "services.html", label: "Services" },
     { href: "portfolio.html", label: "Portfolio" },
     { href: "membres.html", label: "Espace Membre" },
-    { href: "https://discord.com/invite/avvayUmWtd", label: "Lancer un projet", cta: true, external: true }
+    { href: "https://discord.com/invite/dZDfarP8zT", label: "Lancer un projet", cta: true, external: true }
   ];
 
   function currentPage() {
@@ -77,7 +77,7 @@
       '<span>Support après-vente</span>' +
       '<span>Candidatures</span>' +
       "</div></div>" +
-      '<a class="btn btn--discord" href="https://discord.gg/avvayUmWtd" target="_blank" rel="noopener">Rejoindre le Discord</a>' +
+      '<a class="btn btn--discord" href="https://discord.gg/dZDfarP8zT" target="_blank" rel="noopener">Rejoindre le Discord</a>' +
       "</div></div></section>" +
       '<footer class="site-footer"><div class="container">' +
       '<div class="footer-grid">' +
@@ -90,16 +90,16 @@
       "<div><h4>Entreprise</h4>" +
       '<a href="home.html#expertise">À propos</a>' +
       '<a href="membres.html">Direction</a>' +
-      '<a href="https://discord.com/invite/avvayUmWtd" target="_blank" rel="noopener">Nous trouver</a>' +
+      '<a href="https://discord.com/invite/dZDfarP8zT" target="_blank" rel="noopener">Nous trouver</a>' +
       "</div>" +
       "<div><h4>Prestations</h4>" +
       '<a href="services.html">Services</a>' +
       '<a href="services.html#bots">Méthode</a>' +
-      '<a href="https://discord.com/invite/avvayUmWtd" target="_blank" rel="noopener">Demander un devis</a>' +
+      '<a href="https://discord.com/invite/dZDfarP8zT" target="_blank" rel="noopener">Demander un devis</a>' +
       "</div>" +
       "<div><h4>Informations</h4>" +
-      '<a href="https://discord.com/invite/avvayUmWtd" target="_blank" rel="noopener">Mentions légales</a>' +
-      '<a href="https://discord.gg/avvayUmWtd" target="_blank" rel="noopener">Discord</a>' +
+      '<a href="https://discord.com/invite/dZDfarP8zT" target="_blank" rel="noopener">Mentions légales</a>' +
+      '<a href="https://discord.gg/dZDfarP8zT" target="_blank" rel="noopener">Discord</a>' +
       '<button class="motion-toggle" type="button" aria-pressed="' + String(!reduced) + '">' +
       '<span class="motion-toggle__dot"></span>Animations activées' +
       "</button>" +
