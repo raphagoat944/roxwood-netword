@@ -266,10 +266,12 @@ img { max-width: 100%; display: block; }
   transform: translateY(-50%);
   width: min(46vw, 620px);
   height: min(46vw, 620px);
-  z-index: -1;
+  z-index: 0;
   opacity: 0;
   transition: opacity 1.2s ease;
-  pointer-events: none;
+  pointer-events: auto;
+  cursor: grab;
+  touch-action: pan-y;
   filter: drop-shadow(0 0 60px rgba(34, 211, 255, 0.25));
 }
 .hero__3d.is-ready { opacity: 1; }
