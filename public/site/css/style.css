@@ -258,6 +258,34 @@ img { max-width: 100%; display: block; }
 .hero__stats strong { display: block; font-family: "Poppins", sans-serif; font-size: 1.6rem; }
 .hero__stats span { font-size: 0.8rem; color: var(--grey); letter-spacing: 0.08em; text-transform: uppercase; }
 
+/* Scène 3D du hero */
+.hero__3d {
+  position: absolute;
+  top: 50%;
+  right: 2%;
+  transform: translateY(-50%);
+  width: min(46vw, 620px);
+  height: min(46vw, 620px);
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+  pointer-events: none;
+  filter: drop-shadow(0 0 60px rgba(34, 211, 255, 0.25));
+}
+.hero__3d.is-ready { opacity: 1; }
+.hero__3d canvas { width: 100%; height: 100%; display: block; }
+
+@media (max-width: 900px) {
+  .hero__3d {
+    width: 78vw;
+    height: 78vw;
+    right: -12%;
+    top: 22%;
+    opacity: 0;
+  }
+  .hero__3d.is-ready { opacity: 0.45; }
+}
+
 /* Bandeau de titre pour les pages internes */
 .page-hero {
   padding: clamp(6rem, 12vw, 9rem) 0 clamp(3rem, 6vw, 5rem);

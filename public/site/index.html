@@ -10,6 +10,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.169.0/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.169.0/examples/jsm/"
+    }
+  }
+  </script>
 </head>
 <body>
   <!-- Header commun injecté par js/main.js -->
@@ -19,6 +27,7 @@
   <section class="hero">
     <div class="hero__bg"></div>
     <div class="hero__veil"></div>
+    <div class="hero__3d" data-hero3d aria-hidden="true"></div>
     <div class="container hero__inner">
       <span class="eyebrow reveal">Studio digital &mdash; conception &amp; systèmes</span>
       <h1 class="reveal" data-delay="80">Roxwood Network<br><span class="text-grad">Agence Digitale</span></h1>
@@ -132,5 +141,6 @@
 
   <div data-footer></div>
   <script src="js/main.js"></script>
+  <script type="module" src="js/hero3d.js"></script>
 </body>
 </html>
