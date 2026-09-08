@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Espace Membre — Roxwood Network</title>
-  <meta name="description" content="Espace réservé aux membres Roxwood Network : candidatures, commandes, absences et logs relayés par notre bot Discord.">
+  <meta name="description" content="Espace réservé aux membres Roxwood Network.">
   <link rel="icon" href="img/logo.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,19 +19,17 @@
       <span class="eyebrow reveal">Accès réservé</span>
       <h1 class="reveal" data-delay="60">Espace Membre <span class="text-grad">Roxwood Network</span></h1>
       <p class="section-lead reveal" data-delay="120">
-        Cet espace reçoit en temps réel les événements de notre bot Discord : candidatures,
-        commandes et factures, demandes d'absence et journaux d'activité de l'entreprise.
+        Connectez-vous pour accéder à votre espace personnel et aux outils internes de l'agence.
       </p>
     </div>
   </section>
 
   <section class="section">
-    <div class="container grid grid--2" style="gap:2.5rem;align-items:start">
+    <div class="container" style="max-width:520px">
 
-      <!-- Formulaire de connexion -->
-      <form class="panel form reveal reveal--left" data-login-form autocomplete="off">
+      <form class="panel form reveal" data-login-form autocomplete="off">
         <div>
-          <span class="status"><i></i>Passerelle bot connectée</span>
+          <span class="status"><i></i>Serveur accessible</span>
           <h2 style="font-size:1.4rem;margin-top:.6rem">Connexion sécurisée</h2>
         </div>
 
@@ -50,42 +48,9 @@
 
         <button class="btn btn--primary btn--block" type="submit">Connexion</button>
         <p class="form-note">
-          Accès de démonstration : <b>invite</b> / <b>demo</b>. Chaque connexion est journalisée.
+          Accès de démonstration : <b>invite</b> / <b>demo</b>.
         </p>
       </form>
-
-      <!-- Bloc technique -->
-      <aside class="reveal reveal--right" data-delay="120" style="display:grid;gap:1.5rem">
-        <article class="card">
-          <h3>Le bot derrière l'espace membre</h3>
-          <p>
-            Un bot Discord (Node.js, TypeScript, discord.js, Prisma/PostgreSQL) qui ajoute une sur-couche
-            à Ticket Tool : recrutement par formulaire, service client avec catalogue et facturation
-            automatique, demandes d'absence et lecture des journaux d'activité de l'entreprise.
-            Toute la configuration se fait par boutons dans un panneau d'administration, sans commandes à taper.
-          </p>
-          <a class="btn btn--ghost" style="margin-top:1.4rem" href="https://github.com/poulpizar01/roxwood-network-entreprise" target="_blank" rel="noopener">Voir le dépôt du bot</a>
-        </article>
-
-        <article class="card">
-          <h3>Comment les données arrivent ici</h3>
-          <ul class="feature-list" style="margin-top:1rem">
-            <li><i class="dot"></i><div><b>Événements poussés</b><span>Le bot envoie candidatures, commandes, absences et journaux dès qu'ils changent.</span></div></li>
-            <li><i class="dot"></i><div><b>Signature vérifiée</b><span>Chaque envoi est signé (HMAC-SHA256) et refusé s'il ne correspond pas.</span></div></li>
-            <li><i class="dot"></i><div><b>Sens unique</b><span>Cette adresse ne fait qu'accepter des données : elle n'en restitue jamais.</span></div></li>
-            <li><i class="dot"></i><div><b>Consultation séparée</b><span>La lecture passe par cet espace membre, protégé par sa propre authentification.</span></div></li>
-          </ul>
-        </article>
-
-        <article class="card card--magenta">
-          <h3>Niveaux d'accès</h3>
-          <ul class="feature-list" style="margin-top:1rem">
-            <li><i class="dot"></i><div><b>Direction</b><span>Configuration, coffre, statistiques complètes.</span></div></li>
-            <li><i class="dot"></i><div><b>Staff</b><span>Suivi des candidatures, commandes et absences.</span></div></li>
-            <li><i class="dot"></i><div><b>Client</b><span>Consultation de ses propres commandes et factures.</span></div></li>
-          </ul>
-        </article>
-      </aside>
 
     </div>
   </section>
