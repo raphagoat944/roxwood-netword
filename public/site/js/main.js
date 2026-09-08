@@ -197,8 +197,16 @@
     });
   }
 
+  /* ---------- Préférences ---------- */
+  function restoreMotionPreference() {
+    if (localStorage.getItem("roxwood-reduce-motion") === "1") {
+      document.documentElement.classList.add("reduce-motion");
+    }
+  }
+
   /* ---------- Initialisation ---------- */
   document.addEventListener("DOMContentLoaded", function () {
+    restoreMotionPreference();
     buildHeader();
     buildFooter();
     initReveal();
