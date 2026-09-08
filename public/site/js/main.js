@@ -56,35 +56,65 @@
   function buildFooter() {
     var host = document.querySelector("[data-footer]");
     if (!host) return;
+
+    var reduced = document.documentElement.classList.contains("reduce-motion");
+
     host.innerHTML =
+      '<section class="community-section"><div class="container">' +
+      '<span class="eyebrow eyebrow--magenta reveal">Communauté</span>' +
+      '<h2 class="section-title reveal" data-delay="60">Tout passe par le Discord.</h2>' +
+      '<div class="community-card reveal" data-delay="120">' +
+      '<div class="community-card__body">' +
+      '<h3>Le serveur Roxwood Network</h3>' +
+      '<p>Ouverture de dossier client, suivi de projet, journal des livraisons et support après-vente : le serveur centralise tous les échanges. Un client, un salon privé, un historique consultable.</p>' +
+      '<div class="community-tags">' +
+      '<span>Ouverture de dossier</span>' +
+      '<span>Suivi de projet</span>' +
+      '<span>Journal des livraisons</span>' +
+      '<span>Support après-vente</span>' +
+      '<span>Candidatures</span>' +
+      "</div></div>" +
+      '<a class="btn btn--discord" href="https://discord.gg/avvayUmWtd" target="_blank" rel="noopener">Rejoindre le Discord</a>' +
+      "</div></div></section>" +
       '<footer class="site-footer"><div class="container">' +
       '<div class="footer-grid">' +
       "<div>" +
       '<a class="brand" href="index.html"><img src="img/logo.png" alt="Logo Roxwood Network">' +
       '<span><span class="brand-name">Roxwood Network</span>' +
       '<span class="brand-sub">Agence digitale</span></span></a>' +
-      '<p style="color:var(--grey);font-size:.9rem;margin-top:1rem;max-width:34ch">' +
-      "Conception de sites et portails immersifs pour les entreprises, agences et organisations de la ville.</p>" +
+      '<p class="footer-about">Studio web : sites, espaces membres et outils de gestion. Balboa Street, Los Santos, San Andreas.</p>' +
       "</div>" +
-      "<div><h4>Navigation</h4>" +
-      PAGES.map(function (p) { return '<a href="' + p.href + '">' + p.label + "</a>"; }).join("") +
+      "<div><h4>Entreprise</h4>" +
+      '<a href="index.html#expertise">À propos</a>' +
+      '<a href="membres.html">Direction</a>' +
+      '<a href="contact.html">Nous trouver</a>' +
       "</div>" +
-      "<div><h4>Services</h4>" +
-      '<a href="services.html#vitrines">Sites vitrines</a>' +
-      '<a href="services.html#portails">Portails internes</a>' +
-      '<a href="services.html#bots">Intégration bots / API</a>' +
-      '<a href="services.html#clandestin">Systèmes sécurisés</a>' +
+      "<div><h4>Prestations</h4>" +
+      '<a href="services.html">Services</a>' +
+      '<a href="services.html#bots">Méthode</a>' +
+      '<a href="contact.html">Demander un devis</a>' +
       "</div>" +
-      "<div><h4>Contact</h4>" +
-      '<a href="mailto:contact@roxwood-network.rp">contact@roxwood-network.rp</a>' +
-      "<a href=\"contact.html\">Discord : RoxwoodNetwork#0001</a>" +
-      '<a href="https://github.com/poulpizar01/roxwood-network-entreprise" target="_blank" rel="noopener">Notre bot Discord</a>' +
+      "<div><h4>Informations</h4>" +
+      '<a href="contact.html">Mentions légales</a>' +
+      '<a href="https://discord.gg/avvayUmWtd" target="_blank" rel="noopener">Discord</a>' +
+      '<button class="motion-toggle" type="button" aria-pressed="' + String(!reduced) + '">' +
+      '<span class="motion-toggle__dot"></span>Animations activées' +
+      "</button>" +
       "</div>" +
       "</div>" +
       '<div class="footer-bottom"><span>&copy; ' + new Date().getFullYear() +
-      " Roxwood Network. Tous droits réservés.</span>" +
-      "<span>Studio digital &mdash; conception, hébergement, maintenance</span></div>" +
+      ' Roxwood Network · Univers Roxwood</span>' +
+      '<span>Projet immersif · aucune existence réelle</span></div>' +
       "</div></footer>";
+
+    var toggle = host.querySelector(".motion-toggle");
+    if (toggle) {
+      toggle.addEventListener("click", function () {
+        var reducedNow = document.documentElement.classList.toggle("reduce-motion");
+        toggle.setAttribute("aria-pressed", String(!reducedNow));
+        localStorage.setItem("roxwood-reduce-motion", reducedNow ? "1" : "");
+      });
+    }
   }
 
   /* ---------- 2. Révélations au scroll ---------- */
@@ -167,8 +197,16 @@
     });
   }
 
+  /* ---------- Préférences ---------- */
+  function restoreMotionPreference() {
+    if (localStorage.getItem("roxwood-reduce-motion") === "1") {
+      document.documentElement.classList.add("reduce-motion");
+    }
+  }
+
   /* ---------- Initialisation ---------- */
   document.addEventListener("DOMContentLoaded", function () {
+    restoreMotionPreference();
     buildHeader();
     buildFooter();
     initReveal();

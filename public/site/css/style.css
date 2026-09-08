@@ -437,7 +437,7 @@ tbody tr:hover { background: rgba(34, 211, 255, 0.05); }
 .kpi strong { font-family: "Poppins", sans-serif; font-size: 1.8rem; }
 .kpi span { color: var(--grey); font-size: 0.85rem; }
 
-/* ---------- 10. CTA & Footer ---------- */
+/* ---------- 10. CTA, Communauté & Footer ---------- */
 .cta-band {
   text-align: center;
   padding: clamp(3rem, 7vw, 5rem) clamp(1.2rem, 4vw, 3rem);
@@ -448,15 +448,113 @@ tbody tr:hover { background: rgba(34, 211, 255, 0.05); }
     linear-gradient(160deg, rgba(47, 107, 255, 0.14), rgba(217, 38, 198, 0.1));
 }
 
-.site-footer { border-top: 1px solid var(--line); background: var(--navy-800); padding: 3.5rem 0 2rem; margin-top: 2rem; }
-.footer-grid { display: grid; gap: 2rem; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
-.site-footer h4 { font-size: 0.78rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--grey); margin-bottom: 0.9rem; }
-.site-footer a { color: var(--grey); font-size: 0.92rem; display: block; padding: 0.2rem 0; transition: color 0.3s ease; }
-.site-footer a:hover { color: var(--cyan); }
+.community-section {
+  padding: clamp(4rem, 9vw, 6rem) 0 2rem;
+  background:
+    radial-gradient(900px 360px at 80% 20%, rgba(217, 38, 198, 0.12), transparent 60%),
+    var(--navy-900);
+}
+.eyebrow--magenta { color: var(--magenta); }
+
+.community-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 2rem;
+  margin-top: 2rem;
+  padding: clamp(1.6rem, 4vw, 2.4rem);
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background:
+    linear-gradient(120deg, rgba(217, 38, 198, 0.12), rgba(47, 107, 255, 0.08) 55%, rgba(34, 211, 255, 0.06));
+  box-shadow: 0 30px 80px -40px rgba(0, 0, 0, 0.6);
+}
+.community-card h3 { font-size: clamp(1.3rem, 3vw, 1.7rem); }
+.community-card p {
+  color: var(--grey);
+  max-width: 60ch;
+  margin-top: 0.6rem;
+  line-height: 1.65;
+}
+.community-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1.4rem;
+}
+.community-tags span {
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--grey);
+  font-size: 0.82rem;
+}
+.btn--discord {
+  border: none;
+  background: linear-gradient(120deg, #d926c6, #22d3ff);
+  color: #05070f;
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: 0 10px 40px -10px rgba(217, 38, 198, 0.45);
+}
+.btn--discord:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 50px -12px rgba(217, 38, 198, 0.55);
+}
+@media (max-width: 720px) {
+  .community-card { grid-template-columns: 1fr; text-align: center; }
+  .community-tags { justify-content: center; }
+  .btn--discord { justify-self: center; }
+}
+
+.site-footer { border-top: 1px solid var(--line); background: var(--navy-800); padding: 3.5rem 0 2rem; }
+.footer-grid { display: grid; gap: 2.5rem; grid-template-columns: 2fr repeat(3, 1fr); }
+.footer-about {
+  color: var(--grey);
+  font-size: 0.9rem;
+  margin-top: 1rem;
+  max-width: 34ch;
+}
+.site-footer h4 { font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--cyan); margin-bottom: 0.9rem; }
+.site-footer a { color: var(--grey); font-size: 0.92rem; display: block; padding: 0.25rem 0; transition: color 0.3s ease; }
+.site-footer a:hover { color: var(--white); }
+
+.motion-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-top: 0.25rem;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--grey);
+  font-size: 0.92rem;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+.motion-toggle:hover { color: var(--white); }
+.motion-toggle__dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: var(--glow-cyan);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+.reduce-motion .motion-toggle__dot { background: #6b7896; box-shadow: none; }
+
 .footer-bottom {
   margin-top: 2.5rem; padding-top: 1.4rem; border-top: 1px solid var(--line);
   display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: space-between;
   color: var(--grey); font-size: 0.82rem;
+}
+@media (max-width: 860px) {
+  .footer-grid { grid-template-columns: repeat(2, 1fr); }
+  .footer-grid > div:first-child { grid-column: 1 / -1; }
+}
+@media (max-width: 520px) {
+  .footer-grid { grid-template-columns: 1fr; }
 }
 
 /* ---------- 11. Animations ---------- */
