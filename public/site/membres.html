@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Espace Membre — Roxwood Network</title>
+  <meta name="description" content="Espace réservé aux membres Roxwood Network : gestion des projets, des accès et des dépôts via le bot GitHub.">
+  <link rel="icon" href="img/logo.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div data-header></div>
+
+  <section class="page-hero">
+    <div class="container">
+      <span class="eyebrow reveal">Accès réservé</span>
+      <h1 class="reveal" data-delay="60">Espace Membre <span class="text-grad">Roxwood Network</span></h1>
+      <p class="section-lead reveal" data-delay="120">
+        Cet espace permet aux membres autorisés de gérer les projets, les accès et les dépôts via notre bot GitHub.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container grid grid--2" style="gap:2.5rem;align-items:start">
+
+      <!-- Formulaire de connexion -->
+      <form class="panel form reveal reveal--left" data-login-form autocomplete="off">
+        <div>
+          <span class="status"><i></i>Passerelle Roxwood GitHub Bot en ligne</span>
+          <h2 style="font-size:1.4rem;margin-top:.6rem">Connexion sécurisée</h2>
+        </div>
+
+        <div class="field">
+          <label for="identifiant">Identifiant</label>
+          <input id="identifiant" name="identifiant" type="text" placeholder="votre identifiant" required>
+        </div>
+
+        <div class="field">
+          <label for="motdepasse">Mot de passe</label>
+          <input id="motdepasse" name="motdepasse" type="password" placeholder="••••••••" required>
+        </div>
+
+        <div class="alert alert--error"></div>
+        <div class="alert alert--ok"></div>
+
+        <button class="btn btn--primary btn--block" type="submit">Connexion</button>
+        <p class="form-note">
+          Accès de démonstration : <b>invite</b> / <b>demo</b>. Toute tentative non autorisée est journalisée.
+        </p>
+      </form>
+
+      <!-- Bloc technique -->
+      <aside class="reveal reveal--right" data-delay="120" style="display:grid;gap:1.5rem">
+        <article class="card">
+          <h3>Intégration technique</h3>
+          <p>
+            L'espace membre est conçu pour fonctionner avec le bot GitHub Roxwood : création de dépôts,
+            suivi des versions et déploiement des sites clients depuis un seul tableau de bord.
+          </p>
+          <a class="btn btn--ghost" style="margin-top:1.4rem" href="https://github.com/poulpizar01/roxwood-network-entreprise" target="_blank" rel="noopener">Ouvrir le dépôt du bot</a>
+        </article>
+        <article class="card card--magenta">
+          <h3>Niveaux d'accès</h3>
+          <ul class="feature-list" style="margin-top:1rem">
+            <li><i class="dot"></i><div><b>Direction</b><span>Gestion complète des projets et des membres.</span></div></li>
+            <li><i class="dot"></i><div><b>Développeur</b><span>Accès aux dépôts et aux déploiements.</span></div></li>
+            <li><i class="dot"></i><div><b>Client</b><span>Consultation de l'avancement de son projet.</span></div></li>
+          </ul>
+        </article>
+      </aside>
+
+    </div>
+  </section>
+
+  <div data-footer></div>
+  <script src="js/main.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>
