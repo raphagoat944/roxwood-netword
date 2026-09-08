@@ -68,12 +68,12 @@
       });
     }
 
-    var create = root.querySelector("[data-create-project]");
+    var create = root.querySelector("[data-refresh]");
     if (create) {
       create.addEventListener("click", function () {
         var alertBox = root.querySelector(".alert--ok");
         alertBox.textContent =
-          "Dépôt initialisé par le Roxwood GitHub Bot — en attente de validation par un administrateur.";
+          "Flux synchronisé — dernières candidatures, commandes et journaux récupérés depuis le bot.";
         alertBox.classList.add("is-visible");
       });
     }
