@@ -72,7 +72,7 @@
       "</div>" +
       "<div><h4>Services</h4>" +
       '<a href="services.html#vitrines">Sites vitrines</a>' +
-      '<a href="services.html#portails">Portails RP</a>' +
+      '<a href="services.html#portails">Portails internes</a>' +
       '<a href="services.html#bots">Intégration bots / API</a>' +
       '<a href="services.html#clandestin">Systèmes sécurisés</a>' +
       "</div>" +

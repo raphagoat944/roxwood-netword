@@ -8,7 +8,7 @@
 
   var KEY = "roxwood_session";
 
-  // Comptes de démonstration RP.
+  // Comptes de démonstration.
   var ACCOUNTS = [
     { id: "poulpizar", pass: "roxwood2025", name: "Poulpizar", role: "Directeur technique" },
     { id: "invite", pass: "demo", name: "Invité", role: "Accès lecture" }
