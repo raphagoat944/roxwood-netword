@@ -9,7 +9,7 @@
 
   /* ---------- 1. Header & footer communs ---------- */
   var PAGES = [
-    { href: "index.html", label: "Accueil" },
+    { href: "home.html", label: "Accueil" },
     { href: "services.html", label: "Services" },
     { href: "portfolio.html", label: "Portfolio" },
     { href: "membres.html", label: "Espace Membre" },
@@ -18,7 +18,7 @@
 
   function currentPage() {
     var file = window.location.pathname.split("/").pop();
-    return file === "" ? "index.html" : file;
+    return file === "" ? "home.html" : file;
   }
 
   function buildHeader() {
@@ -39,7 +39,7 @@
     host.innerHTML =
       '<header class="site-header">' +
       '<div class="container nav">' +
-      '<a class="brand" href="index.html">' +
+      '<a class="brand" href="home.html">' +
       '<img src="img/logo.png" alt="Logo Roxwood Network">' +
       "<span><span class=\"brand-name\">Roxwood Network</span>" +
       '<span class="brand-sub">Agence digitale</span></span>' +
@@ -82,13 +82,13 @@
       '<footer class="site-footer"><div class="container">' +
       '<div class="footer-grid">' +
       "<div>" +
-      '<a class="brand" href="index.html"><img src="img/logo.png" alt="Logo Roxwood Network">' +
+      '<a class="brand" href="home.html"><img src="img/logo.png" alt="Logo Roxwood Network">' +
       '<span><span class="brand-name">Roxwood Network</span>' +
       '<span class="brand-sub">Agence digitale</span></span></a>' +
       '<p class="footer-about">Studio web : sites, espaces membres et outils de gestion. Balboa Street, Los Santos, San Andreas.</p>' +
       "</div>" +
       "<div><h4>Entreprise</h4>" +
-      '<a href="index.html#expertise">À propos</a>' +
+      '<a href="home.html#expertise">À propos</a>' +
       '<a href="membres.html">Direction</a>' +
       '<a href="https://discord.com/invite/avvayUmWtd" target="_blank" rel="noopener">Nous trouver</a>' +
       "</div>" +
