@@ -13,7 +13,7 @@
     { href: "services.html", label: "Services" },
     { href: "portfolio.html", label: "Portfolio" },
     { href: "membres.html", label: "Espace Membre" },
-    { href: "https://discord.gg/avvayUmWtd", label: "Lancer un projet", cta: true, external: true }
+    { href: "https://discord.com/invite/avvayUmWtd", label: "Lancer un projet", cta: true, external: true }
   ];
 
   function currentPage() {
