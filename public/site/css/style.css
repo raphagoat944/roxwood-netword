@@ -165,6 +165,22 @@ img { max-width: 100%; display: block; }
   border-radius: 2px;
 }
 
+.nav-cta {
+  background: linear-gradient(135deg, var(--cyan) 0%, var(--magenta) 100%);
+  color: var(--white) !important;
+  font-weight: 700;
+  box-shadow: 0 0 18px rgba(34, 211, 255, 0.35), 0 0 28px rgba(217, 38, 198, 0.22);
+  animation: ctaPulse 2.4s ease-in-out infinite;
+}
+.nav-cta:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 0 26px rgba(34, 211, 255, 0.55), 0 0 42px rgba(217, 38, 198, 0.35);
+}
+@keyframes ctaPulse {
+  0%, 100% { box-shadow: 0 0 18px rgba(34, 211, 255, 0.35), 0 0 28px rgba(217, 38, 198, 0.22); }
+  50% { box-shadow: 0 0 28px rgba(34, 211, 255, 0.55), 0 0 46px rgba(217, 38, 198, 0.38); }
+}
+
 .nav-toggle {
   display: none;
   width: 44px; height: 44px;
