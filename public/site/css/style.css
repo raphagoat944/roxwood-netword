@@ -242,7 +242,7 @@ img { max-width: 100%; display: block; }
     linear-gradient(180deg, rgba(5, 7, 15, 0.82), rgba(5, 7, 15, 0.95));
 }
 
-.hero__inner { padding: 8rem 0 6rem; max-width: 780px; }
+.hero__inner { padding: 8rem 0 6rem; max-width: 780px; position: relative; z-index: 2; }
 .hero h1 { font-size: clamp(2.3rem, 6vw, 4.2rem); }
 .hero p.hero__sub { color: #c6d3ee; font-size: clamp(1rem, 2vw, 1.2rem); margin-top: 1.25rem; max-width: 60ch; }
 .hero__actions { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 2.25rem; }
