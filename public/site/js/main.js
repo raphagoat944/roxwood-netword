@@ -26,7 +26,6 @@
     if (!host) return;
     var active = currentPage();
     // Les sous-pages restent rattachées à leur rubrique parente.
-    if (active === "portfolio-preview.html") active = "portfolio.html";
     if (active === "dashboard.html") active = "membres.html";
 
     var links = PAGES.map(function (p) {
