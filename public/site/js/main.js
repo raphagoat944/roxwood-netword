@@ -13,7 +13,7 @@
     { href: "services.html", label: "Services" },
     { href: "portfolio.html", label: "Portfolio" },
     { href: "membres.html", label: "Espace Membre" },
-    { href: "contact.html", label: "Contact" }
+    { href: "https://discord.gg/avvayUmWtd", label: "Lancer un projet", cta: true, external: true }
   ];
 
   function currentPage() {
@@ -30,7 +30,10 @@
 
     var links = PAGES.map(function (p) {
       var cls = p.href === active ? ' class="is-active"' : "";
-      return '<a href="' + p.href + '"' + cls + ">" + p.label + "</a>";
+      if (p.cta) cls = ' class="nav-cta"';
+      var attrs = "";
+      if (p.external) attrs += ' target="_blank" rel="noopener"';
+      return '<a href="' + p.href + '"' + cls + attrs + ">" + p.label + "</a>";
     }).join("");
 
     host.innerHTML =
