@@ -90,15 +90,15 @@
       "<div><h4>Entreprise</h4>" +
       '<a href="index.html#expertise">À propos</a>' +
       '<a href="membres.html">Direction</a>' +
-      '<a href="contact.html">Nous trouver</a>' +
+      '<a href="https://discord.com/invite/avvayUmWtd" target="_blank" rel="noopener">Nous trouver</a>' +
       "</div>" +
       "<div><h4>Prestations</h4>" +
       '<a href="services.html">Services</a>' +
       '<a href="services.html#bots">Méthode</a>' +
-      '<a href="contact.html">Demander un devis</a>' +
+      '<a href="https://discord.com/invite/avvayUmWtd" target="_blank" rel="noopener">Demander un devis</a>' +
       "</div>" +
       "<div><h4>Informations</h4>" +
-      '<a href="contact.html">Mentions légales</a>' +
+      '<a href="https://discord.com/invite/avvayUmWtd" target="_blank" rel="noopener">Mentions légales</a>' +
       '<a href="https://discord.gg/avvayUmWtd" target="_blank" rel="noopener">Discord</a>' +
       '<button class="motion-toggle" type="button" aria-pressed="' + String(!reduced) + '">' +
       '<span class="motion-toggle__dot"></span>Animations activées' +
