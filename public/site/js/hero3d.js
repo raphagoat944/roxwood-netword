@@ -1,8 +1,8 @@
 // Scène Three.js du hero : cristal en rotation lente, réactif à la souris.
-import * as THREE from "https://unpkg.com/three@0.169.0/build/three.module.js";
-import { GLTFLoader } from "https://unpkg.com/three@0.169.0/examples/jsm/loaders/GLTFLoader.js";
-import { DRACOLoader } from "https://unpkg.com/three@0.169.0/examples/jsm/loaders/DRACOLoader.js";
-import { RoomEnvironment } from "https://unpkg.com/three@0.169.0/examples/jsm/environments/RoomEnvironment.js";
+import * as THREE from "three";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
+import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 
 const MODEL_URL = "/__l5e/assets-v1/5d24afbd-be7c-40c2-b209-ced3716a92c4/crystal.glb";
 
