@@ -14,9 +14,14 @@ if (mount && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
   renderer.toneMappingExposure = 1.15;
   mount.appendChild(renderer.domElement);
 
+  // Limites de zoom personnalisables par montage (ex. page d'accueil plus large)
+  const baseZoom = parseFloat(mount.dataset.zoomBase || "3.4");
+  const minZoom = parseFloat(mount.dataset.zoomMin || "2.2");
+  const maxZoom = parseFloat(mount.dataset.zoomMax || "5");
+
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
-  camera.position.set(0, 0, 3.4);
+  camera.position.set(0, 0, baseZoom);
 
   const pmrem = new THREE.PMREMGenerator(renderer);
   scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
