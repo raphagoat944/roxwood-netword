@@ -274,6 +274,7 @@ img { max-width: 100%; display: block; }
   inset: 0;
   background: var(--grad-brand);
   opacity: 0;
+  pointer-events: none; /* l'overlay ne doit jamais bloquer les clics des boutons */
   transition: opacity 0.45s ease;
   mask: linear-gradient(180deg, #000, transparent 55%);
   mix-blend-mode: overlay;
@@ -338,6 +339,7 @@ img { max-width: 100%; display: block; }
 .project__media::after {
   content: "";
   position: absolute; inset: 0;
+  pointer-events: none;
   background: linear-gradient(180deg, transparent 35%, rgba(5, 7, 15, 0.92));
 }
 .project__badge { position: absolute; top: 1rem; left: 1rem; z-index: 2; }
