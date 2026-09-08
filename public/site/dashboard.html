@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tableau de bord — Roxwood Network</title>
+  <meta name="description" content="Tableau de bord interne Roxwood Network : projets en cours, statut des dépôts GitHub et création de nouveaux projets.">
+  <link rel="icon" href="img/logo.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-dashboard>
+  <div data-header></div>
+
+  <section class="page-hero" style="padding-bottom:2.5rem">
+    <div class="container">
+      <span class="status"><i></i>Connecté via Roxwood GitHub Bot</span>
+      <h1 style="margin-top:.8rem">Tableau de bord</h1>
+      <p class="section-lead">
+        Bonjour <b data-user-name>Membre</b> — <span data-user-role>Accès lecture</span>.
+      </p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:2.5rem">
+    <div class="container dash-grid">
+
+      <!-- Colonne latérale -->
+      <aside class="dash-side reveal reveal--left">
+        <h4 style="font-size:.75rem;letter-spacing:.18em;text-transform:uppercase;color:var(--grey)">Navigation</h4>
+        <nav>
+          <a href="#projets" class="is-active">Projets</a>
+          <a href="#depots">Dépôts GitHub</a>
+          <a href="https://github.com/poulpizar01/roxwood-network-entreprise" target="_blank" rel="noopener">Bot Roxwood</a>
+          <a href="portfolio.html">Portfolio public</a>
+        </nav>
+        <button class="btn btn--ghost btn--block" style="margin-top:1.4rem" type="button" data-logout>Déconnexion</button>
+      </aside>
+
+      <!-- Contenu -->
+      <div style="display:grid;gap:1.5rem">
+
+        <div class="grid grid--4">
+          <div class="card reveal"><div class="kpi"><strong>6</strong><span>Projets actifs</span></div></div>
+          <div class="card reveal" data-delay="80"><div class="kpi"><strong>12</strong><span>Dépôts suivis</span></div></div>
+          <div class="card reveal" data-delay="160"><div class="kpi"><strong>3</strong><span>Déploiements 24 h</span></div></div>
+          <div class="card reveal" data-delay="240"><div class="kpi"><strong>2</strong><span>Demandes en attente</span></div></div>
+        </div>
+
+        <div class="alert alert--ok"></div>
+
+        <!-- Liste des projets -->
+        <section id="projets" class="panel reveal">
+          <div style="display:flex;flex-wrap:wrap;gap:1rem;justify-content:space-between;align-items:center">
+            <h2 style="font-size:1.25rem">Projets</h2>
+            <button class="btn btn--primary" type="button" data-create-project>Créer un nouveau projet</button>
+          </div>
+
+          <div class="table-wrap" style="margin-top:1.4rem" id="depots">
+            <table>
+              <thead>
+                <tr><th>Projet</th><th>Type</th><th>Dépôt GitHub</th><th>Statut</th><th></th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Roxwood Entreprise</td>
+                  <td><span class="tag">Entreprise</span></td>
+                  <td>roxwood-network-entreprise</td>
+                  <td><span class="status"><i></i>Déployé</span></td>
+                  <td><a class="btn btn--ghost" href="https://github.com/poulpizar01/roxwood-network-entreprise" target="_blank" rel="noopener">Ouvrir le dépôt GitHub</a></td>
+                </tr>
+                <tr>
+                  <td>Marlowe Vineyard</td>
+                  <td><span class="tag">Agence</span></td>
+                  <td>Marlowe-Vineyard</td>
+                  <td><span class="status"><i></i>Déployé</span></td>
+                  <td><a class="btn btn--ghost" href="https://poulpizar01.github.io/Marlowe-Vineyard/index.html" target="_blank" rel="noopener">Ouvrir le site</a></td>
+                </tr>
+                <tr>
+                  <td>LaMaja13</td>
+                  <td><span class="tag tag--magenta">Illégal</span></td>
+                  <td>lamaja13-interface</td>
+                  <td><span class="status status--warn"><i></i>Build en cours</span></td>
+                  <td><a class="btn btn--ghost" href="https://lamaja13.duckdns.org/" target="_blank" rel="noopener">Ouvrir le site</a></td>
+                </tr>
+                <tr>
+                  <td>Portail interne — Services publics</td>
+                  <td><span class="tag">Agence</span></td>
+                  <td>rox-portail-services</td>
+                  <td><span class="status status--off"><i></i>Brouillon</span></td>
+                  <td><a class="btn btn--ghost" href="https://github.com/poulpizar01/roxwood-network-entreprise" target="_blank" rel="noopener">Ouvrir le dépôt GitHub</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </section>
+
+  <div data-footer></div>
+  <script src="js/main.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

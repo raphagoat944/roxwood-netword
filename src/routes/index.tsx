@@ -1,24 +1,40 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect } from "react";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
+// Le site Roxwood Network est un site statique HTML/CSS/JS servi depuis /site.
+// La racine redirige simplement vers sa page d'accueil.
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Roxwood Network — Agence Digitale RP" },
+      {
+        name: "description",
+        content:
+          "Roxwood Network conçoit des sites et portails immersifs pour entreprises, agences et organisations.",
+      },
+      { property: "og:title", content: "Roxwood Network — Agence Digitale RP" },
+      {
+        property: "og:description",
+        content:
+          "Sites vitrines, portails internes et interfaces sécurisées, conçus sur mesure.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
+  useEffect(() => {
+    window.location.replace("/site/index.html");
+  }, []);
+
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="flex min-h-screen items-center justify-center bg-background">
+      <a className="text-foreground underline" href="/site/index.html">
+        Ouvrir le site Roxwood Network
+      </a>
     </div>
   );
 }
