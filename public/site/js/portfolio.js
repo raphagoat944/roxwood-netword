@@ -30,8 +30,8 @@ var ROXWOOD_PROJECTS = [
   {
     id: "lamaja13",
     name: "La Maja 13",
-    type: "Groupe illégal",
-    category: "Illégal",
+    type: "Groupe Particulier",
+    category: "Particulier",
     accent: "magenta",
     url: "https://lamaja13.duckdns.org/",
     desc: "Interface discrète pour une organisation qui tient à sa confidentialité : navigation minimale, ambiance nocturne et sections réservées aux membres reconnus.",
