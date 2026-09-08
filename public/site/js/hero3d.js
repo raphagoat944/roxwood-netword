@@ -70,7 +70,7 @@ if (mount && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
   let dragged = false;
   let last = { x: 0, y: 0 };
   let idle = 0;
-  let zoom = 3.4;
+  let zoom = baseZoom;
 
   window.addEventListener("pointermove", (e) => {
     target.x = (e.clientX / window.innerWidth - 0.5) * 2;
@@ -112,7 +112,7 @@ if (mount && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
 
   mount.addEventListener("wheel", (e) => {
     e.preventDefault();
-    zoom = Math.max(2.2, Math.min(5, zoom + e.deltaY * 0.0016));
+    zoom = Math.max(minZoom, Math.min(maxZoom, zoom + e.deltaY * 0.0016));
   }, { passive: false });
 
   mount.addEventListener("dblclick", () => {
@@ -120,7 +120,7 @@ if (mount && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     rot.y = 0;
     vel.x = 0;
     vel.y = 0;
-    zoom = 3.4;
+    zoom = baseZoom;
     idle = 0;
   });
 
