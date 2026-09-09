@@ -29,16 +29,43 @@
 /* ---------- 2. Base ---------- */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  background: var(--navy-900);
+}
 
 body {
-  background: var(--navy-900);
+  position: relative;
+  min-height: 100%;
+  background: transparent;
   color: var(--white);
   font-family: "Inter", system-ui, sans-serif;
   font-size: 16px;
   line-height: 1.7;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+}
+
+/* Ciel spatial commun, injecté par js/main.js derrière toutes les pages. */
+.space-background {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+}
+
+.space-background__glow {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(900px 620px at 48% 30%, rgba(34, 211, 255, 0.1), transparent 72%),
+    radial-gradient(760px 560px at 72% 76%, rgba(217, 38, 198, 0.08), transparent 72%),
+    linear-gradient(180deg, rgba(5, 7, 15, 0.12), rgba(5, 7, 15, 0.46));
 }
 
 h1, h2, h3, h4, .font-display {
@@ -58,7 +85,8 @@ img { max-width: 100%; display: block; }
 .section--alt {
   background:
     radial-gradient(900px 400px at 15% 0%, rgba(47, 107, 255, 0.13), transparent 70%),
-    var(--navy-800);
+    rgba(8, 13, 28, 0.78);
+  backdrop-filter: blur(2px);
   border-block: 1px solid var(--line);
 }
 
@@ -294,7 +322,8 @@ img { max-width: 100%; display: block; }
   background:
     radial-gradient(800px 400px at 25% 10%, rgba(47, 107, 255, 0.22), transparent 70%),
     radial-gradient(700px 400px at 85% 30%, rgba(217, 38, 198, 0.16), transparent 70%),
-    var(--navy-900);
+    rgba(5, 7, 15, 0.68);
+  backdrop-filter: blur(2px);
   border-bottom: 1px solid var(--line);
 }
 .page-hero h1 { font-size: clamp(2.1rem, 5vw, 3.4rem); }

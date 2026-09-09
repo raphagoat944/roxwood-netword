@@ -1,13 +1,186 @@
 /* ==========================================================================
    Roxwood Network — Script commun
-   1. Header / footer partagés  2. Menu mobile  3. Révélations au scroll
-   4. Parallax du hero          5. Slider de preview
+   1. Ciel spatial              2. Header / footer partagés
+   3. Menu mobile               4. Révélations au scroll
+   5. Parallax du hero          6. Slider de preview
    ========================================================================== */
 
 (function () {
   "use strict";
 
-  /* ---------- 1. Header & footer communs ---------- */
+  /* ---------- 1. Ciel spatial commun ---------- */
+  function initSpaceBackground() {
+    var canvas = document.createElement("canvas");
+    var glow = document.createElement("div");
+    canvas.className = "space-background";
+    canvas.setAttribute("aria-hidden", "true");
+    glow.className = "space-background__glow";
+    glow.setAttribute("aria-hidden", "true");
+    document.body.prepend(glow);
+    document.body.prepend(canvas);
+
+    var ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    var width = 0;
+    var height = 0;
+    var dpr = 1;
+    var centerX = 0;
+    var centerY = 0;
+    var stars = [];
+    var shooters = [];
+    var animationFrame = 0;
+    var previousTime = 0;
+    var staticDrawn = false;
+
+    function createStar(nearCenter) {
+      var angle = Math.random() * Math.PI * 2;
+      var radius = nearCenter
+        ? Math.random() * 34
+        : Math.random() * Math.max(width, height) * 0.62;
+      var colorRoll = Math.random();
+      return {
+        x: centerX + Math.cos(angle) * radius,
+        y: centerY + Math.sin(angle) * radius * 0.82,
+        previousX: 0,
+        previousY: 0,
+        firstFrame: true,
+        depth: Math.random() * 0.84 + 0.16,
+        twinkle: Math.random() * Math.PI * 2,
+        color: colorRoll > 0.9 ? "217,38,198" : (colorRoll > 0.48 ? "34,211,255" : "230,240,255")
+      };
+    }
+
+    function resize() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = Math.round(width * dpr);
+      canvas.height = Math.round(height * dpr);
+      canvas.style.width = width + "px";
+      canvas.style.height = height + "px";
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      centerX = width * 0.5;
+      centerY = height * 0.46;
+      var density = width < 700 ? 7600 : 5600;
+      var count = Math.min(240, Math.max(75, Math.round(width * height / density)));
+      stars = Array.from({ length: count }, function () { return createStar(false); });
+      shooters = [];
+      staticDrawn = false;
+    }
+
+    function spawnShooter() {
+      var angle = Math.PI * (0.14 + Math.random() * 0.18);
+      shooters.push({
+        x: Math.random() * width * 0.7,
+        y: Math.random() * height * 0.34,
+        velocityX: Math.cos(angle) * 900,
+        velocityY: Math.sin(angle) * 900,
+        life: 1
+      });
+    }
+
+    function drawStatic() {
+      ctx.clearRect(0, 0, width, height);
+      stars.forEach(function (star) {
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, 0.45 + star.depth * 1.1, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(" + star.color + ",0.68)";
+        ctx.fill();
+      });
+    }
+
+    function frame(time) {
+      var reduced = document.documentElement.classList.contains("reduce-motion");
+      if (reduced) {
+        if (!staticDrawn) {
+          drawStatic();
+          staticDrawn = true;
+        }
+        previousTime = time;
+        animationFrame = window.requestAnimationFrame(frame);
+        return;
+      }
+
+      staticDrawn = false;
+      var delta = previousTime ? Math.min((time - previousTime) / 1000, 0.05) : 0.016;
+      previousTime = time;
+      ctx.clearRect(0, 0, width, height);
+
+      stars.forEach(function (star, index) {
+        var dx = star.x - centerX;
+        var dy = star.y - centerY;
+        var length = Math.hypot(dx, dy) || 1;
+        var speed = 8 + star.depth * 24;
+        star.x += dx / length * speed * star.depth * delta;
+        star.y += (dy / length * speed * star.depth - 2.2 * star.depth) * delta;
+
+        if (star.x < -45 || star.x > width + 45 || star.y < -45 || star.y > height + 45) {
+          stars[index] = createStar(true);
+          return;
+        }
+
+        var twinkle = 0.28 + 0.68 * Math.abs(Math.sin(time * 0.001 * (0.55 + star.depth) + star.twinkle));
+        var radius = 0.35 + star.depth * 1.35;
+        if (!star.firstFrame) {
+          ctx.beginPath();
+          ctx.moveTo(star.previousX, star.previousY);
+          ctx.lineTo(star.x, star.y);
+          ctx.strokeStyle = "rgba(" + star.color + "," + (twinkle * 0.38 * star.depth).toFixed(3) + ")";
+          ctx.lineWidth = radius;
+          ctx.stroke();
+        }
+        star.previousX = star.x;
+        star.previousY = star.y;
+        star.firstFrame = false;
+
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, radius, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(" + star.color + "," + twinkle.toFixed(3) + ")";
+        ctx.shadowBlur = radius * 5;
+        ctx.shadowColor = "rgba(" + star.color + ",0.5)";
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      });
+
+      if (Math.random() < delta * 0.24 && shooters.length < 2) spawnShooter();
+      for (var i = shooters.length - 1; i >= 0; i -= 1) {
+        var shooter = shooters[i];
+        shooter.x += shooter.velocityX * delta;
+        shooter.y += shooter.velocityY * delta;
+        shooter.life -= delta * 1.35;
+        if (shooter.life <= 0 || shooter.x > width + 100 || shooter.y > height + 100) {
+          shooters.splice(i, 1);
+          continue;
+        }
+        var gradient = ctx.createLinearGradient(
+          shooter.x,
+          shooter.y,
+          shooter.x - shooter.velocityX * 0.095,
+          shooter.y - shooter.velocityY * 0.095
+        );
+        gradient.addColorStop(0, "rgba(240,250,255," + (shooter.life * 0.9).toFixed(3) + ")");
+        gradient.addColorStop(1, "rgba(34,211,255,0)");
+        ctx.beginPath();
+        ctx.moveTo(shooter.x, shooter.y);
+        ctx.lineTo(shooter.x - shooter.velocityX * 0.095, shooter.y - shooter.velocityY * 0.095);
+        ctx.strokeStyle = gradient;
+        ctx.lineWidth = 1.7;
+        ctx.stroke();
+      }
+
+      animationFrame = window.requestAnimationFrame(frame);
+    }
+
+    resize();
+    window.addEventListener("resize", resize, { passive: true });
+    animationFrame = window.requestAnimationFrame(frame);
+    window.addEventListener("pagehide", function () {
+      window.cancelAnimationFrame(animationFrame);
+    }, { once: true });
+  }
+
+  /* ---------- 2. Header & footer communs ---------- */
   var PAGES = [
     { href: "home.html", label: "Accueil" },
     { href: "services.html", label: "Services" },
@@ -202,7 +375,8 @@
 
   /* ---------- Préférences ---------- */
   function restoreMotionPreference() {
-    if (localStorage.getItem("roxwood-reduce-motion") === "1") {
+    if (localStorage.getItem("roxwood-reduce-motion") === "1" ||
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       document.documentElement.classList.add("reduce-motion");
     }
   }
@@ -210,6 +384,7 @@
   /* ---------- Initialisation ---------- */
   document.addEventListener("DOMContentLoaded", function () {
     restoreMotionPreference();
+    initSpaceBackground();
     buildHeader();
     buildFooter();
     initReveal();
