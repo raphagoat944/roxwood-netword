@@ -84,9 +84,7 @@ img { max-width: 100%; display: block; }
 
 .section--alt {
   background:
-    radial-gradient(900px 400px at 15% 0%, rgba(47, 107, 255, 0.13), transparent 70%),
-    rgba(8, 13, 28, 0.78);
-  backdrop-filter: blur(2px);
+    radial-gradient(900px 400px at 15% 0%, rgba(47, 107, 255, 0.1), transparent 70%);
   border-block: 1px solid var(--line);
 }
 
@@ -253,9 +251,7 @@ img { max-width: 100%; display: block; }
 .hero__bg {
   position: absolute;
   inset: -12% 0 -12% 0;
-  background-image: url("../img/hero.jpg");
-  background-size: cover;
-  background-position: center;
+  background: none;
   z-index: -2;
   will-change: transform;
 }
@@ -267,7 +263,7 @@ img { max-width: 100%; display: block; }
   background:
     radial-gradient(900px 520px at 20% 40%, rgba(34, 211, 255, 0.16), transparent 65%),
     radial-gradient(800px 480px at 85% 70%, rgba(217, 38, 198, 0.14), transparent 65%),
-    linear-gradient(180deg, rgba(5, 7, 15, 0.82), rgba(5, 7, 15, 0.95));
+    linear-gradient(180deg, rgba(5, 7, 15, 0.25), rgba(5, 7, 15, 0.45));
 }
 
 .hero__inner { padding: 8rem 0 6rem; max-width: 780px; position: relative; z-index: 2; }
@@ -322,8 +318,7 @@ img { max-width: 100%; display: block; }
   background:
     radial-gradient(800px 400px at 25% 10%, rgba(47, 107, 255, 0.22), transparent 70%),
     radial-gradient(700px 400px at 85% 30%, rgba(217, 38, 198, 0.16), transparent 70%),
-    rgba(5, 7, 15, 0.68);
-  backdrop-filter: blur(2px);
+    transparent;
   border-bottom: 1px solid var(--line);
 }
 .page-hero h1 { font-size: clamp(2.1rem, 5vw, 3.4rem); }
@@ -526,8 +521,7 @@ tbody tr:hover { background: rgba(34, 211, 255, 0.05); }
 .community-section {
   padding: clamp(4rem, 9vw, 6rem) 0 2rem;
   background:
-    radial-gradient(900px 360px at 80% 20%, rgba(217, 38, 198, 0.12), transparent 60%),
-    var(--navy-900);
+    radial-gradient(900px 360px at 80% 20%, rgba(217, 38, 198, 0.12), transparent 60%);
 }
 .eyebrow--magenta { color: var(--magenta); }
 
@@ -583,7 +577,7 @@ tbody tr:hover { background: rgba(34, 211, 255, 0.05); }
   .btn--discord { justify-self: center; }
 }
 
-.site-footer { border-top: 1px solid var(--line); background: var(--navy-800); padding: 3.5rem 0 2rem; }
+.site-footer { border-top: 1px solid var(--line); background: transparent; padding: 3.5rem 0 2rem; }
 .footer-grid { display: grid; gap: 2.5rem; grid-template-columns: 2fr repeat(3, 1fr); }
 .footer-about {
   color: var(--grey);
