@@ -127,55 +127,9 @@
 
 <p class="splash__foot">Espace membres · Portails &amp; interfaces sécurisées</p>
 
+<script src="js/scene.js"></script>
 <script>
-  // Deux lectures alternées masquent la coupure de la boucle par un fondu croisé.
-  (function () {
-    const crossfadeSeconds = 2.4;
-    const crossfadeMs = crossfadeSeconds * 1000;
-    const layer = document.querySelector(".motion-video");
-    const videos = Array.from(document.querySelectorAll(".motion-video video"));
-    let active = 0;
-    let crossing = false;
-    function play(video) { const attempt = video.play(); if (attempt) attempt.catch(() => {}); }
-    function crossfade() {
-      if (crossing) return;
-      crossing = true;
-      const current = videos[active];
-      const nextIndex = active === 0 ? 1 : 0;
-      const next = videos[nextIndex];
-      next.currentTime = 0;
-      play(next);
-      const reveal = () => {
-        next.classList.add("is-active");
-        current.classList.remove("is-active");
-      };
-      if (typeof next.requestVideoFrameCallback === "function") next.requestVideoFrameCallback(reveal);
-      else setTimeout(reveal, 80);
-      setTimeout(() => {
-        current.pause();
-        current.currentTime = 0;
-        active = nextIndex;
-        crossing = false;
-      }, crossfadeMs + 120);
-    }
-    function frame() {
-      const current = videos[active];
-      if (!crossing && current.duration && current.duration - current.currentTime < crossfadeSeconds) crossfade();
-      requestAnimationFrame(frame);
-    }
-    function syncPlayback() {
-      if (matchMedia("(prefers-reduced-motion: reduce)").matches || document.hidden) {
-        layer.classList.remove("is-moving");
-        videos.forEach((video) => video.pause());
-      } else {
-        layer.classList.add("is-moving");
-        play(videos[active]);
-      }
-    }
-    syncPlayback();
-    document.addEventListener("visibilitychange", syncPlayback);
-    requestAnimationFrame(frame);
-  })();
+
 
   // Ciel spatial animé : dérive lente, scintillement, filantes et "warp" léger.
   (function () {
