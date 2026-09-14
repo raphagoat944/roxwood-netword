@@ -3,6 +3,8 @@
 
    Contenu :
    - Nébuleuses douces pré-rendues (cyan / violet / magenta) en parallaxe lente.
+   - Grandes aurores boréales : rideaux lumineux ondulants (cyan / teal /
+     violet / magenta) dans le haut du ciel, déformés en continu.
    - 4 couches d'étoiles (lointaines → proches) avec scintillement dynamique.
    - Halos lumineux discrets sur les étoiles proches.
    - Étoiles filantes fréquentes : trajectoires, vitesses et couleurs variées,
@@ -44,6 +46,18 @@
 
   var STAR_COLORS = ["#e6f8ff", "#a9e6ff", "#7ad7ff", "#c9b7ff", "#ffb9f0"];
   var SHOOT_COLORS = ["#8ce6ff", "#c9b7ff", "#ff9de8", "#ffffff"];
+
+  /* Aurores boréales : rideaux dans le haut du ciel.
+     y = position de base (fraction de h), thickness = épaisseur du rideau,
+     colors = dégradé vertical, phase/speed = ondulation propre. */
+  var AURORAS = [
+    { y: 0.20, thickness: 0.34, depth: 16, alpha: 0.10, phase: 0.0, speed: 0.10,
+      colors: [[0, "rgba(52,245,197,0.55)"], [0.45, "rgba(34,211,255,0.40)"], [1, "rgba(34,211,255,0)"]] },
+    { y: 0.30, thickness: 0.40, depth: 11, alpha: 0.085, phase: 2.1, speed: 0.07,
+      colors: [[0, "rgba(140,110,255,0.50)"], [0.5, "rgba(34,211,255,0.30)"], [1, "rgba(140,110,255,0)"]] },
+    { y: 0.12, thickness: 0.26, depth: 22, alpha: 0.07, phase: 4.4, speed: 0.13,
+      colors: [[0, "rgba(255,157,232,0.45)"], [0.5, "rgba(52,245,197,0.25)"], [1, "rgba(255,157,232,0)"]] }
+  ];
 
   var EASE = 0.05;          // inertie du parallaxe
   var FPS_CAP = 60;
@@ -265,6 +279,69 @@
     /* -------------------------------------------------------------------- */
     /* Rendu                                                                */
     /* -------------------------------------------------------------------- */
+    /* -------------------------------------------------------------------- */
+    /* Aurores boréales : rideaux ondulants, dessinés en colonnes            */
+    /* -------------------------------------------------------------------- */
+    // Calque dédié à demi-résolution : rééchantillonné à l'affichage,
+    // il lisse naturellement les colonnes en rideaux continus.
+    var auroraCanvas = null, auroraCtx = null;
+
+    function drawAuroras(t, reduced) {
+      var scale = 0.18; // résolution du calque (plus petit = plus doux)
+      var aw = Math.max(Math.round(w * scale), 2);
+      var ah = Math.max(Math.round(h * scale), 2);
+      if (!auroraCanvas || auroraCanvas.width !== aw || auroraCanvas.height !== ah) {
+        auroraCanvas = auroraCanvas || document.createElement("canvas");
+        auroraCanvas.width = aw;
+        auroraCanvas.height = ah;
+        auroraCtx = auroraCanvas.getContext("2d");
+        if (!auroraCtx) return;
+      }
+      var g = auroraCtx;
+      g.setTransform(scale, 0, 0, scale, 0, 0);
+      g.clearRect(0, 0, w, h);
+      g.globalCompositeOperation = "lighter";
+
+      var step = mobile ? 26 : 18; // largeur d'une colonne de rideau
+      AURORAS.forEach(function (a) {
+        var baseY = a.y * h;
+        var thick = a.thickness * h;
+        var parX = -eased.x * a.depth * amplitude;
+        var parY = -eased.y * a.depth * 0.6 * amplitude;
+        var breath = reduced ? 1 : 0.85 + 0.15 * Math.sin(t * a.speed * 1.7 + a.phase);
+
+        for (var x = -step; x <= w + step; x += step) {
+          var nx = x / w;
+          // Ondulation du rideau : deux sinus croisés → houle large + friselis.
+          var sway = reduced ? 0 :
+            Math.sin(nx * 5.2 + t * a.speed * 2.4 + a.phase) * thick * 0.22 +
+            Math.sin(nx * 11.5 - t * a.speed * 3.1 + a.phase * 2) * thick * 0.09;
+          var cx = x + parX;
+          var topY = baseY + parY + sway - thick * 0.55;
+          var botY = baseY + parY + sway * 0.6 + thick * 0.55;
+
+          // Rideau irrégulier : l'opacité varie doucement le long de la bande.
+          var ray = 0.85 + 0.15 * Math.sin(nx * 6 + a.phase + (reduced ? 0 : t * a.speed * 1.3)) +
+            0.1 * Math.sin(nx * 14 - a.phase * 2 + (reduced ? 0 : t * a.speed * 0.7));
+
+          var grad = g.createLinearGradient(cx, topY, cx, botY);
+          for (var k = 0; k < a.colors.length; k++) grad.addColorStop(a.colors[k][0], a.colors[k][1]);
+          g.globalAlpha = a.alpha * breath * ray;
+          g.fillStyle = grad;
+          g.fillRect(cx - step * 0.9, topY, step * 1.8, botY - topY);
+        }
+      });
+
+      // Affichage lissé du calque sur tout l'écran.
+      ctx.save();
+      ctx.globalCompositeOperation = "lighter";
+      ctx.globalAlpha = 1;
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
+      ctx.drawImage(auroraCanvas, 0, 0, aw, ah, 0, 0, w, h);
+      ctx.restore();
+    }
+
     function drawStars(t, reduced) {
       var stretch = reduced ? 0 : warp;
       for (var i = 0; i < stars.length; i++) {
@@ -387,6 +464,7 @@
       }
 
       ctx.globalCompositeOperation = "lighter";
+      drawAuroras(t, reduced); // aurores derrière les étoiles
       drawStars(t, reduced);
       if (!reduced) {
         drawShooters(dt);
