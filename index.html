@@ -35,8 +35,10 @@
     overflow:hidden;
   }
   .motion-video{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-  .motion-video video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;opacity:0;filter:saturate(1.08) contrast(1.06);transition:opacity 1.35s ease-in-out}
+  .motion-video video{position:absolute;inset:-3%;width:106%;height:106%;object-fit:cover;object-position:center;opacity:0;filter:saturate(1.08) contrast(1.06);transform:scale(1.025) translate3d(0,0,0);will-change:opacity,transform;backface-visibility:hidden;transition:opacity 2.4s cubic-bezier(.45,0,.55,1)}
   .motion-video video.is-active{opacity:1}
+  .motion-video.is-moving video:first-child{animation:motionDriftA 18s ease-in-out infinite alternate}
+  .motion-video.is-moving video:last-child{animation:motionDriftB 18s ease-in-out infinite alternate}
   .motion-shade{position:fixed;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(5,7,15,.2),rgba(5,7,15,.52)),linear-gradient(90deg,rgba(5,7,15,.42),transparent 48%,rgba(5,7,15,.32))}
   #stars{position:fixed;inset:0;display:block;z-index:2}
   .glow{
@@ -109,6 +111,8 @@
   @keyframes float{0%,100%{transform:translateY(-6px)}50%{transform:translateY(10px)}}
   @keyframes appear{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
   @keyframes pulse{0%,100%{box-shadow:0 0 0 1px rgba(255,255,255,.12),0 14px 40px rgba(34,211,255,.30)}50%{box-shadow:0 0 0 1px rgba(255,255,255,.2),0 18px 56px rgba(217,38,198,.45)}}
+  @keyframes motionDriftA{from{transform:scale(1.025) translate3d(-.7%,-.4%,0)}to{transform:scale(1.065) translate3d(.8%,.55%,0)}}
+  @keyframes motionDriftB{from{transform:scale(1.065) translate3d(.8%,.55%,0)}to{transform:scale(1.025) translate3d(-.7%,-.4%,0)}}
   @media (prefers-reduced-motion:reduce){*{animation:none!important}}
 </style>
 </head>
@@ -135,33 +139,50 @@
 <script>
   // Deux lectures alternées masquent la coupure de la boucle par un fondu croisé.
   (function () {
+    const crossfadeSeconds = 2.4;
+    const crossfadeMs = crossfadeSeconds * 1000;
+    const layer = document.querySelector(".motion-video");
     const videos = Array.from(document.querySelectorAll(".motion-video video"));
     let active = 0;
     let crossing = false;
     function play(video) { const attempt = video.play(); if (attempt) attempt.catch(() => {}); }
+    function crossfade() {
+      if (crossing) return;
+      crossing = true;
+      const current = videos[active];
+      const nextIndex = active === 0 ? 1 : 0;
+      const next = videos[nextIndex];
+      next.currentTime = 0;
+      play(next);
+      const reveal = () => {
+        next.classList.add("is-active");
+        current.classList.remove("is-active");
+      };
+      if (typeof next.requestVideoFrameCallback === "function") next.requestVideoFrameCallback(reveal);
+      else setTimeout(reveal, 80);
+      setTimeout(() => {
+        current.pause();
+        current.currentTime = 0;
+        active = nextIndex;
+        crossing = false;
+      }, crossfadeMs + 120);
+    }
     function frame() {
       const current = videos[active];
-      if (!crossing && current.duration && current.duration - current.currentTime < 1.35) {
-        crossing = true;
-        const nextIndex = active === 0 ? 1 : 0;
-        const next = videos[nextIndex];
-        next.currentTime = 0;
-        play(next);
-        requestAnimationFrame(() => {
-          next.classList.add("is-active");
-          current.classList.remove("is-active");
-        });
-        setTimeout(() => {
-          current.pause();
-          current.currentTime = 0;
-          active = nextIndex;
-          crossing = false;
-        }, 1450);
-      }
+      if (!crossing && current.duration && current.duration - current.currentTime < crossfadeSeconds) crossfade();
       requestAnimationFrame(frame);
     }
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches) videos[0].pause();
-    else play(videos[0]);
+    function syncPlayback() {
+      if (matchMedia("(prefers-reduced-motion: reduce)").matches || document.hidden) {
+        layer.classList.remove("is-moving");
+        videos.forEach((video) => video.pause());
+      } else {
+        layer.classList.add("is-moving");
+        play(videos[active]);
+      }
+    }
+    syncPlayback();
+    document.addEventListener("visibilitychange", syncPlayback);
     requestAnimationFrame(frame);
   })();
 

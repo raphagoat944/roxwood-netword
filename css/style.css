@@ -59,18 +59,39 @@ body {
 
 .motion-background video {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  inset: -3%;
+  width: 106%;
+  height: 106%;
   object-fit: cover;
   object-position: center;
   opacity: 0;
   filter: saturate(1.08) contrast(1.06);
-  transition: opacity 1.35s ease-in-out;
+  transform: scale(1.025) translate3d(0, 0, 0);
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+  transition: opacity 2.4s cubic-bezier(0.45, 0, 0.55, 1);
 }
 
 .motion-background video.is-active {
   opacity: 1;
+}
+
+.motion-background.is-moving video:first-child {
+  animation: motionDriftA 18s ease-in-out infinite alternate;
+}
+
+.motion-background.is-moving video:last-child {
+  animation: motionDriftB 18s ease-in-out infinite alternate;
+}
+
+@keyframes motionDriftA {
+  from { transform: scale(1.025) translate3d(-0.7%, -0.4%, 0); }
+  to { transform: scale(1.065) translate3d(0.8%, 0.55%, 0); }
+}
+
+@keyframes motionDriftB {
+  from { transform: scale(1.065) translate3d(0.8%, 0.55%, 0); }
+  to { transform: scale(1.025) translate3d(-0.7%, -0.4%, 0); }
 }
 
 .motion-background__shade {
@@ -105,6 +126,7 @@ body {
 }
 
 .reduce-motion .motion-background { opacity: 0.72; }
+.reduce-motion .motion-background video { animation: none; transition: none; }
 
 h1, h2, h3, h4, .font-display {
   font-family: "Poppins", "Inter", sans-serif;

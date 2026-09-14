@@ -12,6 +12,8 @@
 
   /* ---------- 1. Fond vidéo immersif ---------- */
   function initMotionBackground() {
+    var CROSSFADE_SECONDS = 2.4;
+    var CROSSFADE_MS = CROSSFADE_SECONDS * 1000;
     var layer = document.createElement("div");
     var shade = document.createElement("div");
     var videos = [document.createElement("video"), document.createElement("video")];
@@ -25,6 +27,7 @@
       video.muted = true;
       video.playsInline = true;
       video.preload = "auto";
+      video.loop = false;
       video.setAttribute("tabindex", "-1");
       if (index === 0) video.classList.add("is-active");
       layer.appendChild(video);
@@ -47,36 +50,54 @@
       var next = videos[nextIndex];
       next.currentTime = 0;
       play(next);
-      window.requestAnimationFrame(function () {
+
+      function revealNext() {
         next.classList.add("is-active");
         current.classList.remove("is-active");
-      });
+      }
+
+      if (typeof next.requestVideoFrameCallback === "function") {
+        next.requestVideoFrameCallback(revealNext);
+      } else {
+        window.setTimeout(revealNext, 80);
+      }
       window.setTimeout(function () {
         current.pause();
         current.currentTime = 0;
         activeIndex = nextIndex;
         crossing = false;
-      }, 1450);
+      }, CROSSFADE_MS + 120);
     }
 
     function watchLoop() {
       var current = videos[activeIndex];
-      if (!crossing && current.duration && current.duration - current.currentTime < 1.35) crossfade();
+      if (!crossing && current.duration && current.duration - current.currentTime < CROSSFADE_SECONDS) crossfade();
       window.requestAnimationFrame(watchLoop);
     }
 
     function syncMotion() {
       var reduced = document.documentElement.classList.contains("reduce-motion");
       if (reduced) {
+        layer.classList.remove("is-moving");
         videos.forEach(function (video) { video.pause(); });
       } else {
+        layer.classList.add("is-moving");
         play(videos[activeIndex]);
+      }
+    }
+
+    function syncVisibility() {
+      if (document.hidden) {
+        videos.forEach(function (video) { video.pause(); });
+      } else {
+        syncMotion();
       }
     }
 
     syncMotion();
     window.requestAnimationFrame(watchLoop);
     document.addEventListener("roxwood-motion-change", syncMotion);
+    document.addEventListener("visibilitychange", syncVisibility);
   }
 
   /* ---------- 2. Ciel spatial commun ---------- */
