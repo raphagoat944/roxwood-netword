@@ -53,10 +53,24 @@ body {
   z-index: -4;
   width: 100%;
   height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.motion-background video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   object-position: center;
-  pointer-events: none;
+  opacity: 0;
   filter: saturate(1.08) contrast(1.06);
+  transition: opacity 1.35s ease-in-out;
+}
+
+.motion-background video.is-active {
+  opacity: 1;
 }
 
 .motion-background__shade {
@@ -314,7 +328,7 @@ img { max-width: 100%; display: block; }
   transform: translateY(-50%);
   width: min(46vw, 620px);
   height: min(46vw, 620px);
-  z-index: 0;
+  z-index: 1;
   opacity: 0;
   transition: opacity 1.2s ease;
   pointer-events: auto;

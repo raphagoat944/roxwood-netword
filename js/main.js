@@ -12,33 +12,70 @@
 
   /* ---------- 1. Fond vidéo immersif ---------- */
   function initMotionBackground() {
-    var video = document.createElement("video");
+    var layer = document.createElement("div");
     var shade = document.createElement("div");
-    video.className = "motion-background";
-    video.src = MOTION_BACKGROUND_URL;
-    video.autoplay = true;
-    video.muted = true;
-    video.loop = true;
-    video.playsInline = true;
-    video.preload = "metadata";
-    video.setAttribute("aria-hidden", "true");
-    video.setAttribute("tabindex", "-1");
+    var videos = [document.createElement("video"), document.createElement("video")];
+    var activeIndex = 0;
+    var crossing = false;
+
+    layer.className = "motion-background";
+    layer.setAttribute("aria-hidden", "true");
+    videos.forEach(function (video, index) {
+      video.src = MOTION_BACKGROUND_URL;
+      video.muted = true;
+      video.playsInline = true;
+      video.preload = "auto";
+      video.setAttribute("tabindex", "-1");
+      if (index === 0) video.classList.add("is-active");
+      layer.appendChild(video);
+    });
     shade.className = "motion-background__shade";
     shade.setAttribute("aria-hidden", "true");
     document.body.prepend(shade);
-    document.body.prepend(video);
+    document.body.prepend(layer);
+
+    function play(video) {
+      var attempt = video.play();
+      if (attempt && typeof attempt.catch === "function") attempt.catch(function () {});
+    }
+
+    function crossfade() {
+      if (crossing) return;
+      crossing = true;
+      var current = videos[activeIndex];
+      var nextIndex = activeIndex === 0 ? 1 : 0;
+      var next = videos[nextIndex];
+      next.currentTime = 0;
+      play(next);
+      window.requestAnimationFrame(function () {
+        next.classList.add("is-active");
+        current.classList.remove("is-active");
+      });
+      window.setTimeout(function () {
+        current.pause();
+        current.currentTime = 0;
+        activeIndex = nextIndex;
+        crossing = false;
+      }, 1450);
+    }
+
+    function watchLoop() {
+      var current = videos[activeIndex];
+      if (!crossing && current.duration && current.duration - current.currentTime < 1.35) crossfade();
+      window.requestAnimationFrame(watchLoop);
+    }
 
     function syncMotion() {
       var reduced = document.documentElement.classList.contains("reduce-motion");
       if (reduced) {
-        video.pause();
+        videos.forEach(function (video) { video.pause(); });
       } else {
-        var playAttempt = video.play();
-        if (playAttempt && typeof playAttempt.catch === "function") playAttempt.catch(function () {});
+        play(videos[activeIndex]);
       }
     }
 
     syncMotion();
+    window.requestAnimationFrame(watchLoop);
     document.addEventListener("roxwood-motion-change", syncMotion);
   }
 
