@@ -390,7 +390,6 @@
   document.addEventListener("DOMContentLoaded", function () {
     restoreMotionPreference();
     initSpaceBackground();
-    initSpaceBackground();
     buildHeader();
     buildFooter();
     initReveal();
