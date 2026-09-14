@@ -389,7 +389,7 @@
   /* ---------- Initialisation ---------- */
   document.addEventListener("DOMContentLoaded", function () {
     restoreMotionPreference();
-    initMotionBackground();
+    initSpaceBackground();
     initSpaceBackground();
     buildHeader();
     buildFooter();
