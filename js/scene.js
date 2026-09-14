@@ -1,16 +1,14 @@
 /* ==========================================================================
-   Roxwood Network — Décor animé de fond (galaxie + montagnes en silhouette)
+   Roxwood Network — Fond animé « galaxy » (composant autonome)
 
-   Objectif : un arrière-plan premium, profond et discret.
-   - 4 couches empilées (ciel galaxie, halo néon, montagnes lointaines,
-     montagnes proches) animées par transform GPU uniquement.
-   - Parallaxe douce : la galaxie bouge peu, les montagnes davantage,
-     avec inertie (lerp) et dérive lente permanente.
-   - Réactif au curseur, au doigt et à l'inclinaison de l'appareil.
-   - Voile assombrissant au-dessus pour garantir la lisibilité du contenu.
-   - Zéro interception de clic (pointer-events: none, z-index négatif).
-   - Fallback statique si « prefers-reduced-motion » ou animations désactivées.
-   - Animation en pause quand l'onglet est masqué (économie GPU).
+   - Canvas 2D unique, plein écran, fixe, derrière tout le contenu.
+   - Profondeur : 3 couches d'étoiles (lointaines → proches) + nébuleuses.
+   - Parallaxe curseur / doigt / inclinaison avec inertie douce (lerp).
+   - Dérive lente permanente, scintillement subtil, halos néon discrets.
+   - Nébuleuses pré-rendues une fois (offscreen) : coût GPU/CPU minimal.
+   - Jamais cliquable (pointer-events:none, z-index négatif).
+   - Fallback statique si « prefers-reduced-motion » ou animations coupées.
+   - Pause automatique quand l'onglet est masqué.
    ========================================================================== */
 
 (function () {
@@ -20,157 +18,223 @@
   if (window.__roxwoodScene) return;
   window.__roxwoodScene = true;
 
-  /* ----------------------------------------------------------------------
-     Styles du décor (injectés pour garder le composant autonome)
-     ---------------------------------------------------------------------- */
+  /* ---------------------------------------------------------------------- */
+  /* Styles (injectés pour garder le composant autonome)                     */
+  /* ---------------------------------------------------------------------- */
   var CSS = [
-    // Conteneur : plein écran, fixe, derrière tout, jamais cliquable.
-    ".scene{position:fixed;inset:0;z-index:-4;overflow:hidden;pointer-events:none}",
-    // Couches : légèrement débordantes pour ne jamais révéler de bord.
-    ".scene__layer{position:absolute;left:-7%;right:-7%;top:-7%;bottom:-7%;",
-    "background-repeat:no-repeat;will-change:transform;backface-visibility:hidden;",
-    "transform:translate3d(0,0,0)}",
-    // Ciel galaxie : couche la plus lointaine, donc la plus lente.
-    ".scene__sky{background-image:url('img/parallax-sky.jpg');background-size:cover;",
-    "background-position:center;filter:saturate(1.04) contrast(1.02) brightness(.95)}",
-    // Halo néon très doux (cyan + magenta) pour l'ambiance.
-    ".scene__aurora{background:radial-gradient(760px 520px at 26% 34%,rgba(34,211,255,.16),transparent 68%),",
-    "radial-gradient(680px 480px at 74% 62%,rgba(217,38,198,.13),transparent 70%);mix-blend-mode:screen}",
-    // Montagnes lointaines : silhouette bleu nuit atténuée.
-    ".scene__far{background-image:url('img/parallax-mountains-far.png');background-size:106% auto;",
-    "background-position:center 88%;opacity:.9;filter:brightness(.82) saturate(1.04)}",
-    // Montagnes proches : silhouette sombre, la plus réactive.
-    ".scene__near{background-image:url('img/parallax-mountains-near.png');background-size:112% auto;",
-    "background-position:center bottom;filter:brightness(.78)}",
-    // Voile de lisibilité, au-dessus du décor et sous le contenu.
-    ".scene__shade{position:fixed;inset:0;z-index:-3;pointer-events:none;",
-    "background:linear-gradient(180deg,rgba(5,7,15,.26),rgba(5,7,15,.6)),",
-    "linear-gradient(90deg,rgba(5,7,15,.5),rgba(5,7,15,.12) 52%,rgba(5,7,15,.38))}"
+    ".galaxy-bg{position:fixed;inset:0;z-index:-4;display:block;pointer-events:none}",
+    // Voile de lisibilité : au-dessus du fond, sous le contenu.
+    ".galaxy-shade{position:fixed;inset:0;z-index:-3;pointer-events:none;",
+    "background:radial-gradient(120% 90% at 50% 0%,rgba(5,7,15,0),rgba(5,7,15,.45) 70%,rgba(5,7,15,.72)),",
+    "linear-gradient(180deg,rgba(5,7,15,.28),rgba(5,7,15,.5))}"
   ].join("");
 
-  /* ----------------------------------------------------------------------
-     Configuration des couches
-     depth : amplitude du déplacement au curseur (px)
-     drift : amplitude de la dérive lente permanente (px)
-     ---------------------------------------------------------------------- */
+  /* Couches d'étoiles : depth = amplitude de parallaxe (px), size/alpha visuels */
   var LAYERS = [
-    { cls: "scene__sky", depth: 5, drift: 4 },
-    { cls: "scene__aurora", depth: 12, drift: 10 },
-    { cls: "scene__far", depth: 20, drift: 6 },
-    { cls: "scene__near", depth: 38, drift: 9 }
+    { count: 150, depth: 6, size: [0.5, 1.0], alpha: [0.25, 0.55], speed: 0.6 },
+    { count: 90, depth: 16, size: [0.8, 1.6], alpha: [0.35, 0.75], speed: 1.0 },
+    { count: 45, depth: 34, size: [1.2, 2.4], alpha: [0.5, 0.95], speed: 1.6 }
   ];
 
-  var EASE_POINTER = 0.05; // inertie du suivi curseur (plus bas = plus doux)
-  var EASE_SCROLL = 0.07;
-  var FPS_CAP = 45; // suffisant pour un mouvement lent, plus léger pour le GPU
+  var EASE = 0.045;     // inertie du suivi curseur
+  var FPS_CAP = 45;     // mouvement lent : 45 fps suffit
+  var COLORS = ["#dff6ff", "#a9e6ff", "#c9b7ff", "#ffc7f2"];
+
+  function rand(min, max) { return min + Math.random() * (max - min); }
 
   function build() {
     var style = document.createElement("style");
     style.textContent = CSS;
     document.head.appendChild(style);
 
-    var scene = document.createElement("div");
-    scene.className = "scene";
-    scene.setAttribute("aria-hidden", "true");
-
+    var canvas = document.createElement("canvas");
+    canvas.className = "galaxy-bg";
+    canvas.setAttribute("aria-hidden", "true");
     var shade = document.createElement("div");
-    shade.className = "scene__shade";
+    shade.className = "galaxy-shade";
     shade.setAttribute("aria-hidden", "true");
-
-    var nodes = LAYERS.map(function (layer) {
-      var el = document.createElement("div");
-      el.className = "scene__layer " + layer.cls;
-      scene.appendChild(el);
-      return el;
-    });
-
-    // Insérés en tête du body : ils restent derrière toute la structure.
     document.body.prepend(shade);
-    document.body.prepend(scene);
+    document.body.prepend(canvas);
 
-    /* --------------------------------------------------------------------
-       État d'entrée (curseur, inclinaison, défilement) + valeurs lissées
-       -------------------------------------------------------------------- */
+    var ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    var w = 0, h = 0, dpr = 1;
+    var mobile = false, amplitude = 1;
+    var stars = [];        // toutes les étoiles, avec leur couche
+    var nebula = null;     // canvas offscreen des nébuleuses
+
+    /* -------------------------------------------------------------------- */
+    /* Nébuleuses : pré-rendu unique, redessiné seulement au resize          */
+    /* -------------------------------------------------------------------- */
+    function buildNebula() {
+      var c = document.createElement("canvas");
+      c.width = Math.max(Math.round(w / 2), 1);
+      c.height = Math.max(Math.round(h / 2), 1);
+      var g = c.getContext("2d");
+      if (!g) return null;
+
+      var blobs = [
+        { x: 0.24, y: 0.3, r: 0.55, color: "rgba(34,211,255,0.20)" },
+        { x: 0.78, y: 0.26, r: 0.5, color: "rgba(140,110,255,0.18)" },
+        { x: 0.62, y: 0.74, r: 0.6, color: "rgba(217,38,198,0.15)" },
+        { x: 0.12, y: 0.82, r: 0.45, color: "rgba(46,90,255,0.16)" },
+        { x: 0.5, y: 0.5, r: 0.75, color: "rgba(12,20,48,0.5)" }
+      ];
+
+      blobs.forEach(function (b) {
+        var radius = b.r * Math.max(c.width, c.height);
+        var grad = g.createRadialGradient(b.x * c.width, b.y * c.height, 0,
+          b.x * c.width, b.y * c.height, radius);
+        grad.addColorStop(0, b.color);
+        grad.addColorStop(1, "rgba(0,0,0,0)");
+        g.fillStyle = grad;
+        g.fillRect(0, 0, c.width, c.height);
+      });
+
+      return c;
+    }
+
+    /* -------------------------------------------------------------------- */
+    /* Étoiles                                                               */
+    /* -------------------------------------------------------------------- */
+    function seedStars() {
+      stars = [];
+      var density = mobile ? 0.55 : 1;
+      LAYERS.forEach(function (layer, index) {
+        var count = Math.round(layer.count * density);
+        for (var i = 0; i < count; i++) {
+          stars.push({
+            layer: index,
+            x: Math.random(),
+            y: Math.random(),
+            r: rand(layer.size[0], layer.size[1]),
+            a: rand(layer.alpha[0], layer.alpha[1]),
+            phase: Math.random() * Math.PI * 2,
+            twinkle: rand(0.4, 1.4),
+            color: COLORS[Math.floor(Math.random() * COLORS.length)]
+          });
+        }
+      });
+    }
+
+    function resize() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = window.innerWidth;
+      h = window.innerHeight;
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      mobile = window.matchMedia("(max-width: 860px)").matches;
+      amplitude = mobile ? 0.6 : 1;
+      seedStars();
+      nebula = buildNebula();
+    }
+
+    /* -------------------------------------------------------------------- */
+    /* Entrées (curseur / doigt / inclinaison)                               */
+    /* -------------------------------------------------------------------- */
     var target = { x: 0, y: 0 };
     var eased = { x: 0, y: 0 };
-    var scroll = 0;
-    var easedScroll = 0;
-    var mobile = window.matchMedia("(max-width: 860px)").matches;
-    var amplitude = mobile ? 0.6 : 1; // mouvement réduit sur petit écran
 
     function setPointer(x, y) {
       target.x = (x / window.innerWidth) * 2 - 1;
       target.y = (y / window.innerHeight) * 2 - 1;
     }
 
-    window.addEventListener("mousemove", function (event) {
-      setPointer(event.clientX, event.clientY);
+    window.addEventListener("mousemove", function (e) {
+      setPointer(e.clientX, e.clientY);
     }, { passive: true });
 
-    window.addEventListener("touchmove", function (event) {
-      if (event.touches && event.touches[0]) {
-        setPointer(event.touches[0].clientX, event.touches[0].clientY);
+    window.addEventListener("touchmove", function (e) {
+      if (e.touches && e.touches[0]) setPointer(e.touches[0].clientX, e.touches[0].clientY);
+    }, { passive: true });
+
+    window.addEventListener("deviceorientation", function (e) {
+      if (e.gamma == null || e.beta == null) return;
+      target.x = Math.max(-1, Math.min(1, e.gamma / 35));
+      target.y = Math.max(-1, Math.min(1, (e.beta - 45) / 35));
+    }, { passive: true });
+
+    window.addEventListener("resize", resize, { passive: true });
+
+    /* -------------------------------------------------------------------- */
+    /* Rendu                                                                 */
+    /* -------------------------------------------------------------------- */
+    function draw(t, reduced) {
+      ctx.clearRect(0, 0, w, h);
+
+      // Fond profond
+      ctx.fillStyle = "#050710";
+      ctx.fillRect(0, 0, w, h);
+
+      // Nébuleuses (couche la plus lointaine : parallaxe minime)
+      if (nebula) {
+        var nx = -eased.x * 10 * amplitude;
+        var ny = -eased.y * 8 * amplitude;
+        var drift = reduced ? 0 : Math.sin(t * 0.05) * 6;
+        ctx.globalCompositeOperation = "screen";
+        ctx.drawImage(nebula, nx + drift - 20, ny - 20, w + 40, h + 40);
+        ctx.globalCompositeOperation = "source-over";
       }
-    }, { passive: true });
 
-    // Inclinaison de l'appareil : même effet de profondeur sans curseur.
-    window.addEventListener("deviceorientation", function (event) {
-      if (event.gamma == null || event.beta == null) return;
-      target.x = Math.max(-1, Math.min(1, event.gamma / 35));
-      target.y = Math.max(-1, Math.min(1, (event.beta - 45) / 35));
-    }, { passive: true });
+      // Étoiles par couche : plus la couche est proche, plus elle se déplace.
+      for (var i = 0; i < stars.length; i++) {
+        var s = stars[i];
+        var layer = LAYERS[s.layer];
+        var dx = -eased.x * layer.depth * amplitude;
+        var dy = -eased.y * layer.depth * 0.7 * amplitude;
+        var driftX = reduced ? 0 : Math.sin(t * 0.03 * layer.speed + s.phase) * layer.depth * 0.35;
+        var driftY = reduced ? 0 : Math.cos(t * 0.024 * layer.speed + s.phase) * layer.depth * 0.22;
 
-    window.addEventListener("scroll", function () {
-      var max = Math.max(document.body.scrollHeight - window.innerHeight, 1);
-      scroll = Math.min(window.scrollY / max, 1);
-    }, { passive: true });
+        var x = s.x * w + dx + driftX;
+        var y = s.y * h + dy + driftY;
+        var alpha = reduced ? s.a : s.a * (0.72 + 0.28 * Math.sin(t * s.twinkle + s.phase));
 
-    window.addEventListener("resize", function () {
-      mobile = window.matchMedia("(max-width: 860px)").matches;
-      amplitude = mobile ? 0.6 : 1;
-    }, { passive: true });
+        ctx.globalAlpha = Math.max(0, Math.min(1, alpha));
+        ctx.fillStyle = s.color;
+        ctx.beginPath();
+        ctx.arc(x, y, s.r, 0, Math.PI * 2);
+        ctx.fill();
 
-    /* --------------------------------------------------------------------
-       Rendu : une seule écriture de transform par couche et par frame
-       -------------------------------------------------------------------- */
-    function render(t, reduced) {
-      nodes.forEach(function (el, index) {
-        var layer = LAYERS[index];
-        var driftX = reduced ? 0 : Math.sin(t * 0.07 + index) * layer.drift;
-        var driftY = reduced ? 0 : Math.cos(t * 0.05 + index * 1.7) * layer.drift * 0.5;
-        var x = -eased.x * layer.depth * amplitude + driftX;
-        var y = -eased.y * layer.depth * 0.6 * amplitude + driftY - easedScroll * layer.depth * 1.4;
-        var zoom = 1 + layer.depth / 1600 + easedScroll * 0.02;
-        el.style.transform =
-          "translate3d(" + x.toFixed(2) + "px," + y.toFixed(2) + "px,0) scale(" + zoom.toFixed(4) + ")";
-      });
+        // Halo doux uniquement pour les étoiles proches (coût maîtrisé).
+        if (s.layer === 2) {
+          ctx.globalAlpha = Math.max(0, Math.min(1, alpha * 0.18));
+          ctx.beginPath();
+          ctx.arc(x, y, s.r * 4, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+      ctx.globalAlpha = 1;
     }
 
+    /* -------------------------------------------------------------------- */
+    /* Boucle                                                                */
+    /* -------------------------------------------------------------------- */
     var frameInterval = 1000 / FPS_CAP;
-    var lastFrame = 0;
+    var last = 0;
+
+    function isReduced() {
+      return document.documentElement.classList.contains("reduce-motion") ||
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    }
 
     function loop(time) {
       window.requestAnimationFrame(loop);
-
-      // Onglet masqué : rien à dessiner.
       if (document.hidden) return;
+      if (time - last < frameInterval) return;
+      last = time;
 
-      // Fallback statique : position neutre, aucune dérive.
-      var reduced = document.documentElement.classList.contains("reduce-motion") ||
-        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-      if (time - lastFrame < frameInterval) return;
-      lastFrame = time;
-
-      var ease = reduced ? 1 : EASE_POINTER;
+      var reduced = isReduced();
+      var ease = reduced ? 1 : EASE;
       eased.x += ((reduced ? 0 : target.x) - eased.x) * ease;
       eased.y += ((reduced ? 0 : target.y) - eased.y) * ease;
-      easedScroll += (scroll - easedScroll) * (reduced ? 1 : EASE_SCROLL);
 
-      render(time / 1000, reduced);
+      draw(time / 1000, reduced);
     }
 
-    render(0, true); // première image immédiate, avant toute interaction
+    resize();
+    draw(0, true); // première image immédiate
     window.requestAnimationFrame(loop);
   }
 
