@@ -215,7 +215,7 @@
       target.y = (y / window.innerHeight) * 2 - 1;
       // Vitesse du curseur → warp (saturé pour rester discret).
       var v = Math.min(Math.sqrt(pointer.vx * pointer.vx + pointer.vy * pointer.vy) / 60, 1);
-      warp = Math.max(warp, v);
+      warp = Math.max(warp, v * 0.6); // plafonné : l'étirement reste discret
     }
 
     window.addEventListener("mousemove", function (e) {
