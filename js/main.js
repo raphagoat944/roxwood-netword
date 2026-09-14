@@ -389,7 +389,7 @@
   /* ---------- Initialisation ---------- */
   document.addEventListener("DOMContentLoaded", function () {
     restoreMotionPreference();
-    initSpaceBackground();
+    /* Le fond galaxy est géré par js/scene.js (canvas unique). */
     buildHeader();
     buildFooter();
     initReveal();
