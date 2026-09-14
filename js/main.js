@@ -8,7 +8,41 @@
 (function () {
   "use strict";
 
-  /* ---------- 1. Ciel spatial commun ---------- */
+  var MOTION_BACKGROUND_URL = "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260815_030633_1712fc71-4979-4e14-98f9-9f95702ab3da.mp4";
+
+  /* ---------- 1. Fond vidéo immersif ---------- */
+  function initMotionBackground() {
+    var video = document.createElement("video");
+    var shade = document.createElement("div");
+    video.className = "motion-background";
+    video.src = MOTION_BACKGROUND_URL;
+    video.autoplay = true;
+    video.muted = true;
+    video.loop = true;
+    video.playsInline = true;
+    video.preload = "metadata";
+    video.setAttribute("aria-hidden", "true");
+    video.setAttribute("tabindex", "-1");
+    shade.className = "motion-background__shade";
+    shade.setAttribute("aria-hidden", "true");
+    document.body.prepend(shade);
+    document.body.prepend(video);
+
+    function syncMotion() {
+      var reduced = document.documentElement.classList.contains("reduce-motion");
+      if (reduced) {
+        video.pause();
+      } else {
+        var playAttempt = video.play();
+        if (playAttempt && typeof playAttempt.catch === "function") playAttempt.catch(function () {});
+      }
+    }
+
+    syncMotion();
+    document.addEventListener("roxwood-motion-change", syncMotion);
+  }
+
+  /* ---------- 2. Ciel spatial commun ---------- */
   function initSpaceBackground() {
     var canvas = document.createElement("canvas");
     var glow = document.createElement("div");
@@ -289,6 +323,7 @@
         var reducedNow = document.documentElement.classList.toggle("reduce-motion");
         toggle.setAttribute("aria-pressed", String(!reducedNow));
         localStorage.setItem("roxwood-reduce-motion", reducedNow ? "1" : "");
+        document.dispatchEvent(new CustomEvent("roxwood-motion-change"));
       });
     }
   }
@@ -384,6 +419,7 @@
   /* ---------- Initialisation ---------- */
   document.addEventListener("DOMContentLoaded", function () {
     restoreMotionPreference();
+    initMotionBackground();
     initSpaceBackground();
     buildHeader();
     buildFooter();
