@@ -8,7 +8,7 @@
 (function () {
   "use strict";
 
-  var MOTION_BACKGROUND_URL = "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260815_030633_1712fc71-4979-4e14-98f9-9f95702ab3da.mp4";
+  var MOTION_BACKGROUND_URL = "media/roxwood-motion.mp4";
 
   /* ---------- 1. Fond vidéo immersif ---------- */
   function initMotionBackground() {
