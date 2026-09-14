@@ -46,64 +46,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Fond vidéo commun, enrichi par le ciel spatial injecté via js/main.js. */
-.motion-background {
-  position: fixed;
-  inset: 0;
-  z-index: -4;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-.motion-background video {
-  position: absolute;
-  inset: -3%;
-  width: 106%;
-  height: 106%;
-  object-fit: cover;
-  object-position: center;
-  opacity: 0;
-  filter: saturate(1.08) contrast(1.06);
-  transform: scale(1.025) translate3d(0, 0, 0);
-  will-change: opacity, transform;
-  backface-visibility: hidden;
-  transition: opacity 2.4s cubic-bezier(0.45, 0, 0.55, 1);
-}
-
-.motion-background video.is-active {
-  opacity: 1;
-}
-
-.motion-background.is-moving video:first-child {
-  animation: motionDriftA 18s ease-in-out infinite alternate;
-}
-
-.motion-background.is-moving video:last-child {
-  animation: motionDriftB 18s ease-in-out infinite alternate;
-}
-
-@keyframes motionDriftA {
-  from { transform: scale(1.025) translate3d(-0.7%, -0.4%, 0); }
-  to { transform: scale(1.065) translate3d(0.8%, 0.55%, 0); }
-}
-
-@keyframes motionDriftB {
-  from { transform: scale(1.065) translate3d(0.8%, 0.55%, 0); }
-  to { transform: scale(1.025) translate3d(-0.7%, -0.4%, 0); }
-}
-
-.motion-background__shade {
-  position: fixed;
-  inset: 0;
-  z-index: -3;
-  pointer-events: none;
-  background:
-    linear-gradient(90deg, rgba(5, 7, 15, 0.62), rgba(5, 7, 15, 0.22) 52%, rgba(5, 7, 15, 0.42)),
-    linear-gradient(180deg, rgba(5, 7, 15, 0.18), rgba(5, 7, 15, 0.54));
-}
-
+/* Décor en couches injecté par js/scene.js, enrichi par le ciel spatial. */
 .space-background {
   position: fixed;
   inset: 0;
@@ -125,8 +68,8 @@ body {
     linear-gradient(180deg, rgba(5, 7, 15, 0.12), rgba(5, 7, 15, 0.46));
 }
 
-.reduce-motion .motion-background { opacity: 0.72; }
-.reduce-motion .motion-background video { animation: none; transition: none; }
+
+
 
 h1, h2, h3, h4, .font-display {
   font-family: "Poppins", "Inter", sans-serif;
