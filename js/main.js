@@ -8,7 +8,7 @@
 (function () {
   "use strict";
 
-  var MOTION_BACKGROUND_URL = "media/roxwood-motion.mp4";
+  var MOTION_BACKGROUND_URL = "media/roxwood-motion.webm";
 
   /* ---------- 1. Fond vidéo immersif ---------- */
   function initMotionBackground() {
