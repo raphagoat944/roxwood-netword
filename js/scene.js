@@ -12,21 +12,23 @@
 
   var CSS = [
     ".scene{position:fixed;inset:0;z-index:-4;overflow:hidden;pointer-events:none;perspective:1200px}",
-    ".scene__layer{position:absolute;left:-12%;right:-12%;top:-12%;bottom:-12%;background-repeat:no-repeat;will-change:transform;backface-visibility:hidden;transform:translate3d(0,0,0)}",
-    ".scene__sky{background-image:url('img/parallax-sky.jpg');background-size:cover;background-position:center;filter:saturate(1.06) contrast(1.04) brightness(.92)}",
-    ".scene__far{background-image:url('img/parallax-mountains-far.png');background-size:118% auto;background-position:center bottom;opacity:.94;filter:brightness(.8) saturate(1.05)}",
-    ".scene__near{background-image:url('img/parallax-mountains-near.png');background-size:132% auto;background-position:center bottom;filter:brightness(.72)}",
+    ".scene__layer{position:absolute;left:-7%;right:-7%;top:-7%;bottom:-7%;background-repeat:no-repeat;will-change:transform;backface-visibility:hidden;transform:translate3d(0,0,0);image-rendering:auto}",
+    ".scene__sky{background-image:url('img/parallax-sky.jpg');background-size:cover;background-position:center;filter:saturate(1.04) contrast(1.02) brightness(.95)}",
+    ".scene__far{background-image:url('img/parallax-mountains-far.png');background-size:106% auto;background-position:center 88%;opacity:.9;filter:brightness(.82) saturate(1.04)}",
+    ".scene__near{background-image:url('img/parallax-mountains-near.png');background-size:112% auto;background-position:center bottom;filter:brightness(.78)}",
+
     ".scene__aurora{background:radial-gradient(760px 520px at 26% 34%,rgba(34,211,255,.20),transparent 68%),radial-gradient(680px 480px at 74% 62%,rgba(217,38,198,.16),transparent 70%);mix-blend-mode:screen}",
     ".scene__shade{position:fixed;inset:0;z-index:-3;pointer-events:none;background:linear-gradient(180deg,rgba(5,7,15,.24),rgba(5,7,15,.58)),linear-gradient(90deg,rgba(5,7,15,.5),rgba(5,7,15,.12) 52%,rgba(5,7,15,.38))}",
     ".reduce-motion .scene__layer{transition:none}"
   ].join("");
 
   var LAYERS = [
-    { cls: "scene__sky", depth: 6, drift: 5 },
-    { cls: "scene__aurora", depth: 14, drift: 12 },
-    { cls: "scene__far", depth: 26, drift: 8 },
-    { cls: "scene__near", depth: 52, drift: 14 }
+    { cls: "scene__sky", depth: 5, drift: 4 },
+    { cls: "scene__aurora", depth: 12, drift: 10 },
+    { cls: "scene__far", depth: 20, drift: 6 },
+    { cls: "scene__near", depth: 38, drift: 9 }
   ];
+
 
   function build() {
     var style = document.createElement("style");
