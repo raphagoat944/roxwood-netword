@@ -95,7 +95,7 @@
         var driftY = reduced ? 0 : Math.cos(t * 0.05 + index * 1.7) * layer.drift * 0.5;
         var x = -eased.x * layer.depth + driftX;
         var y = -eased.y * layer.depth * 0.6 + driftY - easedScroll * layer.depth * 1.6;
-        var zoom = 1 + layer.depth / 900 + easedScroll * 0.03;
+        var zoom = 1 + layer.depth / 1600 + easedScroll * 0.02;
         el.style.transform = "translate3d(" + x.toFixed(2) + "px," + y.toFixed(2) + "px,0) scale(" + zoom.toFixed(4) + ")";
       });
 
