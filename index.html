@@ -107,17 +107,12 @@
   @keyframes float{0%,100%{transform:translateY(-6px)}50%{transform:translateY(10px)}}
   @keyframes appear{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
   @keyframes pulse{0%,100%{box-shadow:0 0 0 1px rgba(255,255,255,.12),0 14px 40px rgba(34,211,255,.30)}50%{box-shadow:0 0 0 1px rgba(255,255,255,.2),0 18px 56px rgba(217,38,198,.45)}}
-  @keyframes motionDriftA{from{transform:scale(1.025) translate3d(-.7%,-.4%,0)}to{transform:scale(1.065) translate3d(.8%,.55%,0)}}
-  @keyframes motionDriftB{from{transform:scale(1.065) translate3d(.8%,.55%,0)}to{transform:scale(1.025) translate3d(-.7%,-.4%,0)}}
   @media (prefers-reduced-motion:reduce){*{animation:none!important}}
 </style>
 </head>
 <body>
-<div class="motion-video" aria-hidden="true">
-  <video class="is-active" autoplay muted playsinline preload="auto" tabindex="-1" src="media/roxwood-motion.webm"></video>
-  <video muted playsinline preload="auto" tabindex="-1" src="media/roxwood-motion.webm"></video>
-</div>
-<div class="motion-shade" aria-hidden="true"></div>
+<canvas id="stars"></canvas>
+
 <canvas id="stars"></canvas>
 <div class="glow"></div>
 
